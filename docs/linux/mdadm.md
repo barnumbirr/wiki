@@ -9,7 +9,7 @@ tags: [ 'mdadm', 'RAID', 'array', 'disk' ]
 ## Installation
 
 ```bash
-apt install mdadm
+apt-get install mdadm
 ```
 
 ## Check software RAID array status

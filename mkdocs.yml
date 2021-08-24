@@ -8,6 +8,4 @@ plugins:
   - git-revision-date-localized
 
 theme:
-  icon:
-    logo: material/lightbulb
   name: material

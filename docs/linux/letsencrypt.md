@@ -1,7 +1,7 @@
 ---
-title: 'Let\'s Encrypt'
+title: "Let's Encrypt"
 date: 2021-08-24
-tags: [ 'Let\'s Encrypt', 'TLS', 'certificate' ]
+tags: [ "Let's Encrypt", 'TLS', 'certificate' ]
 ---
 
 # Using Let's Encrypt to generate TLS certificates
