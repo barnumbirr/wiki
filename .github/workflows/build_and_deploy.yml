@@ -1,0 +1,26 @@
+name: Build and deploy to Github Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Deploy wiki
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          # Fix git-revision-date-localized-plugin shallow git fetch depth
+          # setting wrong Git revision dates when running in Github Actions.
+          fetch-depth: 0
+
+      - name: Deploy docs
+        uses: mhausenblas/mkdocs-deploy-gh-pages@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_DOMAIN: wiki.martinsimon.me
+          CONFIG_FILE: mkdocs.yml
+

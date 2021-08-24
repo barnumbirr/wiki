@@ -1,0 +1,13 @@
+site_name: wiki.martinsimon.me
+site_url: https://wiki.martinsimon.me
+repo_name: 'barnumbirr/wiki'
+repo_url: 'https://github.com/barnumbirr/wiki'
+
+plugins:
+  - search
+  - git-revision-date-localized
+
+theme:
+  icon:
+    logo: material/lightbulb
+  name: material
