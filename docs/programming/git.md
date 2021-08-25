@@ -1,7 +1,7 @@
 ---
 title: "Git"
 date: 2021-08-25
-tags: [ "Git", 'TLS', 'certificate' ]
+tags: [ 'Git', 'Github', 'repository', 'branch' ]
 ---
 
 ## Usage
