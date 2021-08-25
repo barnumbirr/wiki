@@ -73,6 +73,6 @@ Not suitable for tactile switches.
 ### Krytox™ GPL 206g0
 
 High-viscosity perfluoropolyether (PFPE) grease, thickened with
-polytetrafluoroethylene (PTFE).\
-Suitable for heavy linear switches.\
+polytetrafluoroethylene (PTFE).  
+Suitable for heavy linear switches.  
 Not suitable for tactile switches.
