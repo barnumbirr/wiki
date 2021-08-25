@@ -4,8 +4,6 @@ date: 2021-08-24
 tags: [ "Let's Encrypt", 'TLS', 'certificate' ]
 ---
 
-# Using Let's Encrypt to generate TLS certificates
-
 ## HTTP-01 challenge
 
 Install `certbot`:
