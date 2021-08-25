@@ -13,7 +13,7 @@ Status: install ok installed
 Priority: optional
 Section: x11
 Installed-Size: 5933
-Maintainer: Martin Simon <me@martinsimon.me>
+Maintainer: Martin Simon <email.obfuscated@example.com>
 Architecture: amd64
 Version: 0.9.0-1
 Provides: x-terminal-emulator
@@ -57,19 +57,19 @@ alacritty (0.9.0-1) unstable; urgency=medium
   * Remove manual terminfo file installation
   * Added `ncurses-term` to recommended package list
 
- -- Martin Simon <me@martinsimon.me>  Tue, 03 Aug 2021 00:00:00 +0000
+ -- Martin Simon <email.obfuscated@example.com>  Tue, 03 Aug 2021 00:00:00 +0000
 
 alacritty (0.9.0-rc5-1) unstable; urgency=medium
 
   * New upstream release
 
- -- Martin Simon <me@martinsimon.me>  Mon, 02 Aug 2021 00:00:00 +0000
+ -- Martin Simon <email.obfuscated@example.com>  Mon, 02 Aug 2021 00:00:00 +0000
 
 alacritty (0.9.0-rc4-1) unstable; urgency=medium
 
   * New upstream release
 
- -- Martin Simon <me@martinsimon.me>  Mon, 02 Aug 2021 00:00:00 +0000
+ -- Martin Simon <email.obfuscated@example.com>  Mon, 02 Aug 2021 00:00:00 +0000
 [...]
 ```
 
