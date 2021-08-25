@@ -2,6 +2,8 @@ site_name: wiki.martinsimon.me
 site_url: https://wiki.martinsimon.me
 repo_name: 'barnumbirr/wiki'
 repo_url: 'https://github.com/barnumbirr/wiki'
+copyright: |
+  Copyright &copy; 2021 Martin Simon
 
 plugins:
   - search
@@ -9,3 +11,24 @@ plugins:
 
 theme:
   name: material
+  icon:
+    logo: material/lightbulb
+    repo: fontawesome/brands/github-alt
+  features:
+    - navigation.instant
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
