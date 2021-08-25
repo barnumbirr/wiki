@@ -34,7 +34,11 @@ unused devices: <none>
 Output for RAID6 device:
 
 ```bash
-TODO
+Personalities : [raid6] [raid5] [raid4] [linear] [multipath] [raid0] [raid1] [raid10]
+md0 : active raid6 sdc[2] sda[0] sdd[3] sdb[1] sde[4]
+      35156259840 blocks super 1.2 level 6, 512k chunk, algorithm 2 [5/5] [UUUUU]
+
+unused devices: <none>
 ```
 
 A progress bar is displayed under partitions when a RAID resync process is currently running:
