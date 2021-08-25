@@ -71,3 +71,11 @@ For a remote tag (if you've already pushed the tag)
 ```bash
 user@host:~$ git push --delete origin <tag_name>
 ```
+
+### Syncing a fork
+
+```bash
+user@host:~$ git fetch upstream
+user@host:~$ git checkout master
+user@host:~$ git merge upstream/master
+```
