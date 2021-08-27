@@ -17,7 +17,7 @@ entire block if some of it is still within the retention window.
 
 Simply edit Prometheus' service file `/etc/systemd/system/prometheus.service`
 
-```bash hl_lines="10"
+``` bash hl_lines="10"
 [...]
 [Service]
 Type=simple
