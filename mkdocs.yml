@@ -17,6 +17,9 @@ theme:
   features:
     - navigation.instant
     - search.highlight
+    - pymdownx.highlight
+    - pymdownx.inlinehilite
+    - pymdownx.superfences
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
