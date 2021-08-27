@@ -9,6 +9,15 @@ plugins:
   - search
   - git-revision-date-localized
 
+markdown_extensions:
+  - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+
 theme:
   name: material
   icon:
@@ -17,9 +26,6 @@ theme:
   features:
     - navigation.instant
     - search.highlight
-    - pymdownx.highlight
-    - pymdownx.inlinehilite
-    - pymdownx.superfences
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default

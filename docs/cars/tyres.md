@@ -44,8 +44,9 @@ endurance / track longevity.
 
 Fitted as standard on Mégane 4 R.S Trophy 19-inch "Jerez" wheels.  
 
-Note:  
-Cooked after 4 laps at Spa-Francorchamps in 25° weather using 1.8/1.7 bar of pressure.
+!!! note
+    Cooked after 4 laps at Spa-Francorchamps in 25° weather using 1.8/1.7 bar
+    of pressure.
 
 ### Potenza S007
 

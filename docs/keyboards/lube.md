@@ -21,9 +21,9 @@ TriboSys™ is produced by and is a trademark of Miller-Stephenson Chemical Comp
 | Oil Density (g/mL)         |   1.89     |   1.92     |   1.93     |   1.94     |   1.95     |   1.95     |
 | Shelf Life (Year)          |     20     |     20     |     20     |     20     |     20     |     20     |
 
-Note:  
-VFP = *Vacuum Pump Fluid*  
-GPL = *General Purpose Lube*
+!!! note
+    VFP = *Vacuum Pump Fluid*
+    GPL = *General Purpose Lube*
 
 ### Krytox™ VPF-1514
 
