@@ -8,8 +8,8 @@ The Remarkable 2 or why you won't ever need paper notebooks again.
 
 ## Change SSH password
 
-The default IP and SSH password of the Remarkable tablet is shown in the
-'GPLv3 Compliance' section of the 'Copyrights and licenses' page.  
+The default IP and SSH password of the Remarkable tablet can be found in the
+settings menu.  
 Navigate to it as follows: `Menu > Settings > Help > Copyrights and licenses > 
 General information > GPLv3 Compliance`.
 
@@ -18,6 +18,14 @@ The password is stored in `/etc/remarkable.conf`.
 ```bash
 [General]
 DeveloperPassword=password
+```
+
+## Fix SSH lag
+
+Execute the following command on the device:
+
+```bash
+$ iw wlan0 set power_save off
 ```
 
 ## Updating timezone
