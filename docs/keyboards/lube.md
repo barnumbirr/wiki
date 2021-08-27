@@ -22,7 +22,7 @@ TriboSys™ is produced by and is a trademark of Miller-Stephenson Chemical Comp
 | Shelf Life (Year)          |     20     |     20     |     20     |     20     |     20     |     20     |
 
 !!! note
-    VFP = *Vacuum Pump Fluid*
+    VFP = *Vacuum Pump Fluid*  
     GPL = *General Purpose Lube*
 
 ### Krytox™ VPF-1514
