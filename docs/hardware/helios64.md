@@ -8,9 +8,11 @@ The Helios64 is a powerful ARM board specially designed for Network Attached
 Storage (NAS). It harnesses its processing capabilities from the Rockchip
 RK3399 SoC.
 
-## Increase serial console verbosity
+## Debugging
 
-### Boot from microSD card
+### Increase serial console verbosity
+
+#### Boot from microSD card
 
 Add the following lines to `/boot/armbianEnv.txt`
 
@@ -20,19 +22,33 @@ console=serial
 extraargs=earlyprintk ignore_loglevel
 ```
 
-### Boot from eMMC
+#### Boot from eMMC
 
 Boot from a fresh image on a microSD card, mount the eMMC then modify
 `/boot/armbianEnv.txt`.
 
-## Log serial console output to file
+### Log serial console output to file
 
 ```bash
 $ screen -S helios64-serial
 $ picocom -b 1500000 /dev/ttyUSB0 -g <filename>.txt
 ```
 
-## Start fans during early boot
+### Audit ArmbianEnv.txt
+
+For some unknown reason `/boot/armbianEnv.txt` keeps getting overwritten with
+logrotate configuration "gibberish". To monitor which process is modifying the
+file, setup `autitd` as follows:
+
+```bash
+$ sudo apt-get install auditd
+$ sudo auditctl -w /boot/armbianEnv.txt -p wa
+$ sudo tail -F /var/log/audit/audit.log
+```
+
+## Management
+
+### Start fans during early boot
 
 Allow the fans to spin at a constant speed from the earliest stage of initrd
 until fancontrol is started by the system. If the boot process encounters an
@@ -83,14 +99,14 @@ $ sudo update-initramfs -u -k all
 $ sudo reboot
 ```
 
-## Update bootloader
+### Update bootloader
 
 ```bash
 $ nand-sata-install
 # select option 5 "Install/Update the bootloader on SD/eMMC"
 ```
 
-## Disable NCQ
+### Disable NCQ
 
 Edit `/boot/armbianEnv.txt` and add the following
 
@@ -98,22 +114,10 @@ Edit `/boot/armbianEnv.txt` and add the following
 extraargs=libata.force=noncq
 ```
 
-## Audit ArmbianEnv.txt
-
-For some unknown reason `/boot/armbianEnv.txt` keeps getting overwritten with
-logrotate configuration "gibberish". To monitor which process is modifying the
-file, setup `autitd` as follows:
-
-```bash
-$ sudo apt-get install auditd
-$ sudo auditctl -w /boot/armbianEnv.txt -p wa
-$ sudo tail -F /var/log/audit/audit.log
-```
-
 The output should show actions performed on the file and the process ID
 performing those actions.
 
-## Fan management
+### Fan management
 
 The standard fans shipped with the Helios64 were rather noisy and therefor
 replaced by two Noctua NF-A8 PWM fans. A custom fancontrol configuration
