@@ -4,6 +4,54 @@ date: 2021-08-25
 tags: [ 'Git', 'Github', 'repository', 'branch' ]
 ---
 
+## Configuration
+
+### Setting up multiple Git profiles
+
+When using git as the version control tool for both personal and work related
+projects, it might be interesting to isolate the two (or more) profiles.
+
+In your home directory, create the following files:
+
+```bash
+$ ls -la
+-rw-rw-rw-  1 root root  483 Aug 25 08:07 .gitconfig
+-rw-rw-rw-  1 root root   57 Apr  2  2021 .gitconfig-personal
+-rw-r--r--  1 root root   57 Aug  5  2021 .gitconfig-work
+```
+
+Add the following to `.gitconfig`:
+
+```bash
+[includeIf "gitdir:/path/to/personal/projects/directory"]
+    path = .gitconfig-personal
+[includeIf "gitdir:/path/to/work/projects/directory"]
+    path = .gitconfig-work
+[...]
+```
+
+Each subsequent configuration file can then define it's own user and Git
+settings, e.g.:
+
+```bash
+$ cat .gitconfig-personal
+[user]
+  name = John Doe
+  email = john.doe@personal.com
+[help]
+  autocorrect = 1
+$ cat .gitconfig-work
+[user]
+  name = John Doe
+  email = john.doe@work.com
+[diff]
+  tool = icdiff
+[difftool]
+  prompt = false
+[icdiff]
+  options = --highlight --line-numbers
+```
+
 ## Usage
 
 ### Squash last `<n>` commits
