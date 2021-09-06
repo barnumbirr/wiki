@@ -102,3 +102,48 @@ ExecStart=/usr/local/bin/prometheus \
 <p style="font-size: 10px" align="right">
     Source: <a href="https://github.com/prometheus/blackbox_exporter/issues/51#issuecomment-385169368">prometheus/blackbox_exporter</a>
 </p>
+
+## Maintenance
+
+### Delete timeseries metrics
+
+Time series in Prometheus can be deleted over administrative HTTP API only
+(disabled by default).
+
+To enabled it, pass `--web.enable-admin-api` flag to Prometheus through start-up
+script or docker-compose file, depending on installation method.
+
+Use the following syntax to delete all time series metrics that match some
+label:
+
+```bash
+$ curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={foo="bar"}'
+```
+
+To delete time series metrics that match some job or instance, run:
+
+```bash
+$ curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={job="node_exporter"}'
+$ curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={instance="10.0.1.100:9100"}'
+```
+
+To delete all data from Prometheus, run:
+
+```bash
+$ curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={__name__=~".+"}'
+```
+
+Note that the above API calls don’t delete data immediately.
+
+The actual data still exists on disk and will be cleaned up in future
+compaction.
+
+To determine when to remove old data, use
+`--storage.tsdb.retention` option e.g. `--storage.tsdb.retention='365d'`.
+
+To completely remove the data deleted by delete_series send clean_tombstones
+API call:
+
+```bash
+$ curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/clean_tombstones'
+```
