@@ -103,7 +103,7 @@ root@host:~# apt-get install certbot
 
 Install `acme-dns-certbot`:
 ```bash
-root@host:~# wget https://github.com/joohoi/acme-dns-certbot-joohoi/raw/master/acme-dns-auth.p
+root@host:~# wget https://github.com/joohoi/acme-dns-certbot-joohoi/raw/master/acme-dns-auth.py
 root@host:~# chmod +x acme-dns-auth.py
 root@host:~# nano acme-dns-auth.py
 root@host:~# #!/usr/bin/env python3 #Add a 3 to the end of the first line
