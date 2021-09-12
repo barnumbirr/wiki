@@ -1,7 +1,7 @@
 ---
-title: 'Software RAID'
+title: 'mdadm'
 date: 2021-08-24
-tags: [ 'mdadm', 'RAID', 'array', 'disk' ]
+tags: [ 'mdadm', 'RAID', 'software', 'array', 'disk' ]
 ---
 
 # mdadm: Linux software RAID

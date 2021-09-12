@@ -1,8 +1,10 @@
 ---
-title: 'APT: Advanced Package Tool'
+title: 'apt'
 date: 2021-08-25
 tags: [ 'APT', package', 'Debian', 'Ubuntu' ]
 ---
+
+# APT: Advanced Package Tool
 
 ## Retrieve package information
 
