@@ -4,7 +4,13 @@ date: 2021-08-24
 tags: [ "Let's Encrypt", 'TLS', 'certificate' ]
 ---
 
-## HTTP-01 challenge
+## certbot
+
+[certbot](https://certbot.eff.org/) is a free, open source software tool for
+automatically using Let’s Encrypt certificates on manually-administrated
+websites to enable HTTPS.
+
+### HTTP-01 challenge
 
 Install `certbot`:
 ```bash
@@ -90,10 +96,7 @@ root@host:~# crontab -e
 30 3 * * 0 /usr/bin/certbot -q renew --renew-hook "systemctl reload nginx"
 ```
 
-You're done!
-
-
-## DNS-01 challenge
+### DNS-01 challenge
 
 Install `certbot`:
 ```bash
@@ -175,4 +178,31 @@ root@host:~# crontab -e
 30 3 * * 0 /usr/bin/certbot -q renew --renew-hook "systemctl reload nginx"
 ```
 
-You're done!
+### acme.sh
+
+[acme.sh](https://acme.sh/) is a pure Unix shell script implementing ACME client
+protocol.
+
+### DNS-01 challenge
+
+```bash
+$ cd /tmp
+$ git clone https://github.com/acmesh-official/acme.sh.git
+$ cd acme.sh
+$ ./acme.sh --install --nocron --home /opt/etc/acme.sh --accountemail "user@example.com"
+$ nano /opt/etc/acme.sh/dnsapi/dns_ovh.sh
+
+# set your variables
+#Application Key
+OVH_AK="foo"
+
+#Application Secret
+OVH_AS="bar"
+
+#Consumer Key
+OVH_CK="foobar"
+
+$ ./acme.sh --home /opt/etc/acme.sh --server letsencrypt --issue -d example.com --dns dns_ovh
+$ crontab -e
+30 3 * * 0 "/opt/etc/acme.sh/acme.sh" --cron --home "/opt/etc/acme.sh" > /dev/null
+```

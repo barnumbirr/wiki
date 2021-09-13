@@ -1,5 +1,5 @@
 ---
-title: 'Bash'
+title: 'bash'
 date: 2021-08-30
 tags: [ 'bash', 'shell' ]
 ---
