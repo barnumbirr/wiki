@@ -27,6 +27,7 @@ theme:
     repo: fontawesome/brands/github-alt
   features:
     - navigation.instant
+    - navigation.top
     - search.highlight
   palette:
     - media: "(prefers-color-scheme: light)"
