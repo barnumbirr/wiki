@@ -44,8 +44,11 @@ theme:
         icon: material/weather-night
         name: Switch to light mode
 
+extra_css:
+  - stylesheets/extra.css
+
 extra:
   analytics:
     provider: plausible
-    data_domain: wiki.martinsimon.me
-    plausible_script_url: https://plausible.io/js/plausible.outbound-links.js
+    domain: wiki.martinsimon.me
+    script_url: https://plausible.io/js/plausible.outbound-links.js

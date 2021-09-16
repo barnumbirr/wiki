@@ -1,0 +1,40 @@
+{% if not page.is_homepage %}
+    <h3 id="__comments"></h3>
+    <script type="text/javascript">
+        var custom_giscus_theme = false
+        document.onreadystatechange = function () {
+            if (document.readyState == "interactive") {
+                // wait for giscus to load and send it's first message.
+                addEventListener('message', event => {
+                    if (event.origin !== 'https://giscus.app' || custom_giscus_theme == true) {
+                        return;
+                    }
+                    custom_giscus_theme = true
+                    if(document.body.getAttribute("data-md-color-scheme") == "default")
+                        document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "light"},},},'https://giscus.app')
+                    else
+                        document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "dark_high_contrast"},},},'https://giscus.app')
+                });
+                document.getElementById('__palette_1').onclick = function(){
+                    document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "light"},},},'https://giscus.app')
+                }
+                document.getElementById('__palette_2').onclick = function(){
+                    document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "dark_high_contrast"},},},'https://giscus.app')
+                }
+            }
+        }
+    </script>
+
+    <script src="https://giscus.app/client.js"
+        data-repo="barnumbirr/wiki"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzOTkyNjA2ODU="
+        data-category="Comments"
+        data-category-id="DIC_kwDOF8w8Dc4B_EIp"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="1"
+        data-theme="light"
+        crossorigin="anonymous"
+        async>
+    </script>
+{% endif %}
