@@ -1,3 +1,4 @@
+<!-- Adapted to giscus from https://github.com/carissalow/rapids -->
 {% if not page.is_homepage %}
     <h3 id="__comments"></h3>
     <script type="text/javascript">
@@ -13,13 +14,13 @@
                     if(document.body.getAttribute("data-md-color-scheme") == "default")
                         document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "light"},},},'https://giscus.app')
                     else
-                        document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "dark_high_contrast"},},},'https://giscus.app')
+                        document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "dark_dimmed"},},},'https://giscus.app')
                 });
                 document.getElementById('__palette_1').onclick = function(){
                     document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "light"},},},'https://giscus.app')
                 }
                 document.getElementById('__palette_2').onclick = function(){
-                    document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "dark_high_contrast"},},},'https://giscus.app')
+                    document.querySelector("iframe.giscus-frame").contentWindow.postMessage({giscus: {setConfig: {theme: "dark_dimmed"},},},'https://giscus.app')
                 }
             }
         }
