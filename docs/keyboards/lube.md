@@ -14,7 +14,7 @@ TriboSys™ is produced by and is a trademark of Miller-Stephenson Chemical Comp
 
 ## Oils
 
-|                            |  VFP 1514  |   GPL 103  |   GPL 104  |   GPL 105  |   GPL 106  |   GPL 107  |
+|                            |  VPF 1514  |   GPL 103  |   GPL 104  |   GPL 105  |   GPL 106  |   GPL 107  |
 | :--------------------------| :--------- | :--------- | :--------- | :--------- | :--------- | :--------- |
 | Operating Temperature (°C) | -54 to 160 | -60 to 154 | -51 to 159 | -36 to 204 | -36 to 260 | -30 to 288 |
 | Viscosity (cSt) at 20°C    |    140     |     82     |    177     |    522     |    822     |   1535     |
@@ -22,7 +22,7 @@ TriboSys™ is produced by and is a trademark of Miller-Stephenson Chemical Comp
 | Shelf Life (Year)          |     20     |     20     |     20     |     20     |     20     |     20     |
 
 !!! note
-    VFP = *Vacuum Pump Fluid*  
+    VPF = *Vacuum Pump Fluid*  
     GPL = *General Purpose Lube*
 
 ### Krytox™ VPF-1514
