@@ -6,7 +6,7 @@ tags: [ 'systemd', 'system manager', 'service manager', 'init system', 'process'
 
 ## Configuration
 
-### systemd-networkd-wait-online
+### Slow boot, waiting for systemd-networkd-wait-online
 
 By default, `systemd-networkd-wait-online.service` waits for all links it is
 aware of and which are managed by *systemd-networkd* to be fully configured or
@@ -56,3 +56,15 @@ WantedBy=network-online.target
 <p style="font-size: 10px" align="right">
     Source: <a href="https://wiki.archlinux.org/title/Systemd-networkd#systemd-networkd-wait-online">wiki.archlinux.org</a>
 </p>
+
+### Restart service after X amount of time
+
+Let's assume one needs to restart service `X` every hour. Instead of using a
+CRON job, the following lines could simply be added to the `systemd` service
+unit file:
+
+```bash
+[Service]
+RuntimeMaxSec=<seconds after which to restart>
+Restart=always
+```
