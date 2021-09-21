@@ -23,7 +23,7 @@ theme:
   name: material
   custom_dir: overrides
   icon:
-    logo: material/lightbulb
+    logo: fontawesome/solid/book
     repo: fontawesome/brands/github-alt
   features:
     - navigation.instant
