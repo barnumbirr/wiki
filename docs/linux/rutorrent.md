@@ -16,7 +16,7 @@ Moving torrents may come in handy in when using multiple libraries in
 1. In `rutorrent`, choose `Settings > Autotools`.
 2. Enable "Autolabel" feature, Template: `{DIR}`
 3. Enable "AutoMove" if torrent's label matches filter:
-`/ebooks|movies|music|series/`
+`/apps|ebooks|movies|music|series/`
 4. Set path to finished downloads: `/share/data/torrents`, operation type `Move`
 and enable `Add torrent's label to path`
 
