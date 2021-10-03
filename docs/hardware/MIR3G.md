@@ -8,7 +8,7 @@ tags: [ 'Xiaomi', 'router']
 
 ### Linux kernel
 
-Running `Padavan 3.4.3.9L-101_e662678`.
+Running [`Padavan 3.4.3.9L-101_e662678`](https://gitlab.com/dm38/padavan-ng/-/commit/e6626783dcba5cc2dda67d6118ecb5b132d639b8).
 
 ```bash
 $ uname -a
