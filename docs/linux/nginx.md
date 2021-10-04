@@ -11,13 +11,13 @@ tags: [ 'nginx', web', 'server' ]
 Test Nginx configuration
 
 ```bash
-user@host:~$ sudo nginx -t
+$ sudo nginx -t
 ```
 
 Test Nginx configuration and dump output:
 
 ```bash
-user@host:~$ sudo nginx -T
+$ sudo nginx -T
 ```
 
 ## Configuration
@@ -89,25 +89,25 @@ policy = policy_match
 #### Directory creation:
 
 ```bash
-user@host:~$ mkdir -p /etc/ssl/ca/certs/users && \
-user@host:~$ mkdir /etc/ssl/ca/crl && \
-user@host:~$ mkdir /etc/ssl/ca/private
+$ mkdir -p /etc/ssl/ca/certs/users && \
+$ mkdir /etc/ssl/ca/crl && \
+$ mkdir /etc/ssl/ca/private
 ```
 
 #### Database index and CRL number creation:
 
 ```bash
-user@host:~$ touch /etc/ssl/ca/index.txt && echo 01 > /etc/ssl/ca/crlnumber
+$ touch /etc/ssl/ca/index.txt && echo 01 > /etc/ssl/ca/crlnumber
 ```
 
 #### Certificate Authorithy creation:
 
 ```bash
-user@host:~$ openssl genrsa -des3 -out /etc/ssl/ca/private/ca.key 4096
-user@host:~$ openssl req -new -x509 -days 1095 \
+$ openssl genrsa -des3 -out /etc/ssl/ca/private/ca.key 4096
+$ openssl req -new -x509 -days 1095 \
     -key /etc/ssl/ca/private/ca.key \
     -out /etc/ssl/ca/certs/ca.crt
-user@host:~$ openssl ca -name CA_default -gencrl \
+$ openssl ca -name CA_default -gencrl \
     -keyfile /etc/ssl/ca/private/ca.key \
     -cert /etc/ssl/ca/certs/ca.crt \
     -out /etc/ssl/ca/private/ca.crl \
@@ -117,17 +117,17 @@ user@host:~$ openssl ca -name CA_default -gencrl \
 #### User certificate generation:
 
 ```bash
-user@host:~$ openssl genrsa -des3 -out /etc/ssl/ca/certs/users/USERNAME.key 1024
-user@host:~$ openssl req -new -key /etc/ssl/ca/certs/users/USERNAME.key \
+$ openssl genrsa -des3 -out /etc/ssl/ca/certs/users/USERNAME.key 1024
+$ openssl req -new -key /etc/ssl/ca/certs/users/USERNAME.key \
     -out /etc/ssl/ca/certs/users/USERNAME.csr
-user@host:~$ openssl x509 -req -days 1095 \
+$ openssl x509 -req -days 1095 \
     -in /etc/ssl/ca/certs/users/USERNAME.csr \
     -CA /etc/ssl/ca/certs/ca.crt \
     -CAkey /etc/ssl/ca/private/ca.key \
     -CAserial /etc/ssl/ca/serial \
     -CAcreateserial \
     -out /etc/ssl/ca/certs/users/USERNAME.crt
-user@host:~$ openssl pkcs12 -export -clcerts \
+$ openssl pkcs12 -export -clcerts \
     -in /etc/ssl/ca/certs/users/USERNAME.crt \
     -inkey /etc/ssl/ca/certs/users/USERNAME.key \
     -out /etc/ssl/ca/certs/users/USERNAME.p12
@@ -136,19 +136,19 @@ user@host:~$ openssl pkcs12 -export -clcerts \
 #### Nginx configuration:
 
 ```bash
-user@host:~$ ssl_client_certificate /etc/ssl/ca/certs/ca.crt;
-user@host:~$ ssl_crl /etc/ssl/ca/private/ca.crl;
-user@host:~$ ssl_verify_client on;
+$ ssl_client_certificate /etc/ssl/ca/certs/ca.crt;
+$ ssl_crl /etc/ssl/ca/private/ca.crl;
+$ ssl_verify_client on;
 ```
 
 #### User revocation:
 
 ```bash
-user@host:~$ openssl ca -name CA_Default \
+$ openssl ca -name CA_Default \
     -revoke /etc/ssl/ca/certs/users/USERNAME.crt \
     -keyfile /etc/ssl/ca/private/ca.key \
     -cert /etc/ssl/ca/certs/ca.crt
-user@host:~$ openssl ca -name CA_Default -gencrl \
+$ openssl ca -name CA_Default -gencrl \
     -keyfile /etc/ssl/ca/private/ca.key \
     -cert /etc/ssl/ca/certs/ca.crt \
     -out /etc/ssl/ca/private/ca.crl \
