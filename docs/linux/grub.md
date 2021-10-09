@@ -39,3 +39,9 @@ GRUB_DEFAULT="1>2"
 !!! note
     GRUB menu entries numbering starts with 0. Therefore the `1` above points
     to the `Advanced` submenu and `2` points to the third entry of the submenu.
+
+### Themes
+
+Prefered GRUB themes are [`shvchk/poly-dark`](https://github.com/shvchk/poly-dark),
+[`shvchk/poly-light`](https://github.com/shvchk/poly-light) or
+[`vinceliuice/grub2-themes`](https://github.com/vinceliuice/grub2-themes)
