@@ -6,8 +6,7 @@ tags: [ 'Cloudflare', 'CDN', 'DNS' ]
 
 ## Debugging
 
-
-### DNS cache poisoning
+### Self-inflicted DNS cache poisoning
 
 Cloudflare suddenly and randomly starts returning the following when accessing
 `support.example.com`:

@@ -178,7 +178,7 @@ root@host:~# crontab -e
 30 3 * * 0 /usr/bin/certbot -q renew --renew-hook "systemctl reload nginx"
 ```
 
-### acme.sh
+## acme.sh
 
 [acme.sh](https://acme.sh/) is a pure Unix shell script implementing ACME client
 protocol.
@@ -202,7 +202,7 @@ OVH_AS="bar"
 #Consumer Key
 OVH_CK="foobar"
 
-$ ./acme.sh --home /opt/etc/acme.sh --server letsencrypt --issue -d example.com --dns dns_ovh
+$ /opt/etc/acme.sh/acme.sh --home /opt/etc/acme.sh --server letsencrypt --issue -d example.com --dns dns_ovh
 $ crontab -e
 30 3 * * 0 "/opt/etc/acme.sh/acme.sh" --cron --home "/opt/etc/acme.sh" > /dev/null
 ```
