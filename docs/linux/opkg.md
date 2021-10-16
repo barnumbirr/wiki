@@ -31,5 +31,5 @@ $ opkg install wget ca-certificates
 Update `opkg` repository URL:
 
 ```bash
-sed -i 's/http:\/\//https:\/\//g' /opt/etc/opkg.conf
+$ sed -i 's/http:\/\//https:\/\//g' /opt/etc/opkg.conf
 ```

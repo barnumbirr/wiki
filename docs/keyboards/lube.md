@@ -1,5 +1,5 @@
 ---
-title: 'Switch Lube'
+title: 'Lube'
 date: 2021-08-25
 tags: [ 'Mechanical Keyboard', Switches', 'Krytox', 'Tribosys' ]
 ---

@@ -14,8 +14,8 @@ websites to enable HTTPS.
 
 Install `certbot`:
 ```bash
-root@host:~# apt-get update
-root@host:~# apt-get install certbot
+$ apt-get update
+$ apt-get install certbot
 ```
 
 Add the following location to the Nginx HTTP vhost:
@@ -38,12 +38,12 @@ Alias /.well-known/acme-challenge/ "/var/www/letsencrypt/.well-known/acme-challe
 
 Request a certificate:
 ```bash
-root@host:~# certbot certonly --agree-tos --email admin@example.com --webroot -w /var/www/letsencrypt/ --rsa-key-size 4096 -d your_domain.tld -d your_domain2.tld -d your_domain3.tld
+$ certbot certonly --agree-tos --email admin@example.com --webroot -w /var/www/letsencrypt/ --rsa-key-size 4096 -d your_domain.tld -d your_domain2.tld -d your_domain3.tld
 ```
 
 Generate a Diffie-Hellman key:
 ```bash
-root@host:~# openssl dhparam -out /etc/letsencrypt/live/your_domain.tld/dhparam.pem 4096
+$ openssl dhparam -out /etc/letsencrypt/live/your_domain.tld/dhparam.pem 4096
 ```
 
 Add the following to the Nginx HTTPS vhost:
@@ -92,7 +92,7 @@ For Apache:
 
 Setup autorenewal of all the certificates:
 ```bash
-root@host:~# crontab -e
+$ crontab -e
 30 3 * * 0 /usr/bin/certbot -q renew --renew-hook "systemctl reload nginx"
 ```
 
@@ -100,22 +100,30 @@ root@host:~# crontab -e
 
 Install `certbot`:
 ```bash
-root@host:~# apt-get update
-root@host:~# apt-get install certbot
+$ apt-get update
+$ apt-get install certbot
 ```
 
 Install `acme-dns-certbot`:
 ```bash
-root@host:~# wget https://github.com/joohoi/acme-dns-certbot-joohoi/raw/master/acme-dns-auth.py
-root@host:~# chmod +x acme-dns-auth.py
-root@host:~# nano acme-dns-auth.py
-root@host:~# #!/usr/bin/env python3 #Add a 3 to the end of the first line
-root@host:~# mv acme-dns-auth.py /etc/letsencrypt/
+$ wget https://github.com/joohoi/acme-dns-certbot-joohoi/raw/master/acme-dns-auth.py
+$ chmod +x acme-dns-auth.py
+$ nano acme-dns-auth.py
+```
+
+Add a 3 to the end of the first line:
+
+```
+#!/usr/bin/env python3 #Add a 3 to the end of the first line
+```
+
+```bash
+$ mv acme-dns-auth.py /etc/letsencrypt/
 ```
 
 Request a certificate:
 ```bash
-root@host:~# certbot certonly --agree-tos --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --rsa-key-size 4096 --debug-challenges -d your_domain.tld -d your_domain2.tld -d your_domain3.tld
+$ certbot certonly --agree-tos --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --rsa-key-size 4096 --debug-challenges -d your_domain.tld -d your_domain2.tld -d your_domain3.tld
 ```
 
 Add `CNAME` record to DNS zone:
@@ -125,7 +133,7 @@ _acme-challenge.your_domain.tld CNAME a15ce5b2-f170-4c91-97bf-09a5764a88f6.auth.
 
 Generate a Diffie-Hellman key:
 ```bash
-root@host:~# openssl dhparam -out /etc/letsencrypt/live/your_domain.tld/dhparam.pem 4096
+$ openssl dhparam -out /etc/letsencrypt/live/your_domain.tld/dhparam.pem 4096
 ```
 
 Add the following to the Nginx HTTPS vhost:
@@ -174,7 +182,7 @@ For Apache:
 
 Setup autorenewal of all the certificates:
 ```bash
-root@host:~# crontab -e
+$ crontab -e
 30 3 * * 0 /usr/bin/certbot -q renew --renew-hook "systemctl reload nginx"
 ```
 

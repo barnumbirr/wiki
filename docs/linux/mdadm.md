@@ -9,7 +9,7 @@ tags: [ 'mdadm', 'RAID', 'software', 'array', 'disk' ]
 ## Installation
 
 ```bash
-apt-get install mdadm
+$ apt-get install mdadm
 ```
 
 ## Check software RAID array status
@@ -17,16 +17,19 @@ apt-get install mdadm
 Use the following command:
 
 ```bash
-cat /proc/mdstat
+$ cat /proc/mdstat
+```
 
 or
 
-mdadm -D /dev/mdX
+```bash
+$ mdadm -D /dev/mdX
 ```
 
 Output in case of non-existant RAID device:
 
 ```bash
+$ mdadm -D /dev/md0
 Personalities :
 unused devices: <none>
 ```
@@ -34,6 +37,7 @@ unused devices: <none>
 Output for RAID6 device:
 
 ```bash
+$ mdadm -D /dev/md0
 Personalities : [raid6] [raid5] [raid4] [linear] [multipath] [raid0] [raid1] [raid10]
 md0 : active raid6 sdc[2] sda[0] sdd[3] sdb[1] sde[4]
       35156259840 blocks super 1.2 level 6, 512k chunk, algorithm 2 [5/5] [UUUUU]
@@ -44,6 +48,7 @@ unused devices: <none>
 A progress bar is displayed under partitions when a RAID resync process is currently running:
 
 ```bash
+$ mdadm -D /dev/md0
 Personalities : [raid6] [raid5] [raid4] [linear] [multipath] [raid0] [raid1] [raid10]
 md0 : active raid6 sde[4] sdb[1] sdd[3] sda[0] sdc[2]
       35156259840 blocks super 1.2 level 6, 512k chunk, algorithm 2 [5/5] [UUUUU]
@@ -59,28 +64,30 @@ unused devices: <none>
 Check current speed:
 
 ```bash
-sysctl dev.raid.speed_limit_min
-sysctl dev.raid.speed_limit_max
+$ sysctl dev.raid.speed_limit_min
+$ sysctl dev.raid.speed_limit_max
 ```
 These values are set in Kibibytes per second (KiB/s).
 
 Increase target rebuild speed:
 
 ```bash
-echo 50000 > /proc/sys/dev/raid/speed_limit_min
-echo 200000 > /proc/sys/dev/raid/speed_limit_max
+$ echo 50000 > /proc/sys/dev/raid/speed_limit_min
+$ echo 200000 > /proc/sys/dev/raid/speed_limit_max
+```
 
 or
 
-sysctl -w dev.raid.speed_limit_min=50000
-sysctl -w dev.raid.speed_limit_max=200000
+```bash
+$ sysctl -w dev.raid.speed_limit_min=50000
+$ sysctl -w dev.raid.speed_limit_max=200000
 ```
 
 Permanently override default values in `/etc/sysctl.conf`:
 
 ```bash
-dev.raid.speed_limit_min = 50000
-dev.raid.speed_limit_max = 200000
+$ dev.raid.speed_limit_min = 50000
+$ dev.raid.speed_limit_max = 200000
 ```
 
 ### Disable NCQ on all disks
@@ -97,13 +104,13 @@ done
 Get the current read-ahead value:
 
 ```bash
-blockdev --getra /dev/mdX
+$ blockdev --getra /dev/mdX
 ```
 
 Set read-ahead (in 512-byte sectors) per RAID device.
 
 ```bash
-blockdev --setra 65536 /dev/mdX
+$ blockdev --setra 65536 /dev/mdX
 ```
 
 ### Increase stripe cache size
@@ -116,5 +123,5 @@ Linux uses 4096B pages. If you use 256 pages for the stripe cache and you have
 *Only available on RAID5 and RAID6 and boost sync performance by 3-6 times.*
 
 ```bash
-echo 4096 > /sys/block/mdX/md/stripe_cache_size
+$ echo 4096 > /sys/block/mdX/md/stripe_cache_size
 ```
