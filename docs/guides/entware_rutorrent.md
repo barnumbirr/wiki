@@ -53,7 +53,7 @@ throttle.max_peers.normal.set = 100
 throttle.min_peers.seed.set = 10
 throttle.max_peers.seed.set = 50
 throttle.max_uploads.set = 15
-execute2 = {sh,-c,/opt/bin/php /opt/share/www/rutorrent/php/initplugins.php &}
+execute2 = {sh,-c,/opt/bin/php-cli /opt/share/www/rutorrent/php/initplugins.php &}
 
 #min_peers = 1
 #max_peers = 512
@@ -117,7 +117,7 @@ Add the following:
 $pathToExternals = array(
     "curl"  => '/opt/bin/curl',
     "stat"  => '/opt/bin/stat',
-    "php"    => '/opt/bin/php',
+    "php"    => '/opt/bin/php-cli',
     "pgrep"  => '/opt/bin/pgrep',
     "python" => '/opt/bin/python3'
     );
@@ -164,7 +164,7 @@ sys_temp_dir = "/opt/tmp"
 For PHP-FPM:
 
 ```bash
-nano /opt/etc/php7-fpm.d/www.conf
+$ nano /opt/etc/php7-fpm.d/www.conf
 user = admin
 listen.owner = admin
 pm.max_children = 25
@@ -174,19 +174,16 @@ pm.max_spare_servers = 5
 env[PATH] = /opt/bin:/opt/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin
 ```
 
-Don't forget to symlink `php` as for some reason `ruTorrent` won't work without
-it:
-
-```bash
-$ ln -s /opt/bin/php-cli /opt/bin/php
-```
-
 #### Allow PHP-FPM to run as root
 
 ```bash
 $ nano /opt/etc/init.d/S79php7-fpm
 ARGS="--daemonize -R --fpm-config /opt/etc/php7-fpm.conf"
 ```
+
+!!! note
+    You'll need to edit the init file to allow `php-fpm` to run as root each
+    time the package is updated.
 
 ### Configure Nginx
 
@@ -413,7 +410,7 @@ $ crontab -e
 Setup a Diffie-Helmann key as follows:
 
 ```bash
-wget https://ssl-config.mozilla.org/ffdhe4096.txt -O /opt/etc/acme.sh/rutorrent.homelab.lu/dhparam.pem
+$ wget https://ssl-config.mozilla.org/ffdhe4096.txt -O /opt/etc/acme.sh/rutorrent.homelab.lu/dhparam.pem
 ```
 
 ### Restart services
