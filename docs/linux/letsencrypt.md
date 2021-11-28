@@ -186,6 +186,10 @@ $ crontab -e
 30 3 * * 0 /usr/bin/certbot -q renew --renew-hook "systemctl reload nginx"
 ```
 
+!!! hint
+    If DNS records get wiped by accident, credentials as well as CNAMEs for all
+    domains are stored in `/etc/letsencrypt/acmedns.json`.
+
 ## acme.sh
 
 [acme.sh](https://acme.sh/) is a pure Unix shell script implementing ACME client
@@ -212,5 +216,5 @@ OVH_CK="foobar"
 
 $ /opt/etc/acme.sh/acme.sh --home /opt/etc/acme.sh --server letsencrypt --issue -d example.com --dns dns_ovh
 $ crontab -e
-30 3 * * 0 "/opt/etc/acme.sh/acme.sh" --cron --home "/opt/etc/acme.sh" > /dev/null
+30 3 * * 0 "/opt/etc/acme.sh/acme.sh" --cron --home "/opt/etc/acme.sh/" > /dev/null
 ```
