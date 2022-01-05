@@ -13,7 +13,7 @@ issue](https://github.com/barnumbirr/wiki/issues/new).
 ## License
 
 ```
-Copyright 2021 Martin Simon
+Copyright 2021-2022 Martin Simon
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
