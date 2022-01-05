@@ -6,7 +6,7 @@ tags: [ 'Git', 'Github', 'repository', 'branch' ]
 
 ## Configuration
 
-### Automatically signing commits
+### Automatically sign commits
 
 On Debian:
 
@@ -42,6 +42,15 @@ and the following to `.gitconfig-xxxxxxx`
 ```bash
   signingkey = 632C9BB6CF21205A
 ```
+
+!!! note
+    You might want to add the following to `~/.gnupg/gpg-agent.conf` if you tend
+    to use a long running session and wish to keep your GPG key cached:
+
+    ```bash
+    default-cache-ttl 31622400
+    max-cache-ttl 31622400
+    ```
 
 ### Setting up multiple Git profiles
 
