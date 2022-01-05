@@ -6,6 +6,43 @@ tags: [ 'Git', 'Github', 'repository', 'branch' ]
 
 ## Configuration
 
+### Automatically signing commits
+
+On Debian:
+
+
+```bash
+$ apt-get install gnupg2
+$ gpg2 --import file.asc
+$ gpg2 --list-secret-keys --keyid-format=long
+/root/.gnupg/pubring.kbx
+------------------------
+sec   rsa4096/632C9BB6CF21205A 2015-09-30 [SC]
+      6F2B0C373EBE0DD7975D51B9632C2AA6CF21205A
+uid                 [ unknown] John Doe <john.doe@personal.com>
+ssb   rsa4096/9C04F25B59B68D59 2015-09-30 [E]
+
+$ eval "$(keychain --eval --agents gpg 632C9BB6CF21205A)"
+$ echo "test" | gpg2 --clearsign
+```
+
+Add the following to `.gitconfig`:
+
+
+```bash
+[commit]
+  gpgsign = true
+[gpg]
+  program = gpg2
+```
+
+and the following to `.gitconfig-xxxxxxx`
+
+
+```bash
+  signingkey = 632C9BB6CF21205A
+```
+
 ### Setting up multiple Git profiles
 
 When using git as the version control tool for both personal and work related
