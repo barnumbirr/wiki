@@ -22,7 +22,9 @@ sec   rsa4096/632C9BB6CF21205A 2015-09-30 [SC]
 uid                 [ unknown] John Doe <john.doe@personal.com>
 ssb   rsa4096/9C04F25B59B68D59 2015-09-30 [E]
 
-$ eval "$(keychain --eval --agents gpg 632C9BB6CF21205A)"
+$ eval "$(keychain --stop others --quiet --quick --eval --agents gpg,ssh\
+    --inherit any --timeout 31622400 ~/.ssh/id_example1 ~/.ssh/id_example2\
+    ~/.ssh/id_example3 632C9BB6CF21205A)"
 $ echo "test" | gpg2 --clearsign
 ```
 
