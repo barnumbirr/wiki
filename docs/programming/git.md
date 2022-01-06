@@ -6,54 +6,6 @@ tags: [ 'Git', 'Github', 'repository', 'branch' ]
 
 ## Configuration
 
-### Automatically sign commits
-
-On Debian:
-
-
-```bash
-$ apt-get install gnupg2
-$ gpg2 --import file.asc
-$ gpg2 --list-secret-keys --keyid-format=long
-/root/.gnupg/pubring.kbx
-------------------------
-sec   rsa4096/632C9BB6CF21205A 2015-09-30 [SC]
-      6F2B0C373EBE0DD7975D51B9632C2AA6CF21205A
-uid                 [ unknown] John Doe <john.doe@personal.com>
-ssb   rsa4096/9C04F25B59B68D59 2015-09-30 [E]
-
-$ eval "$(keychain --stop others --quiet --quick --eval --agents gpg,ssh\
-    --inherit any --timeout 31622400 ~/.ssh/id_example1 ~/.ssh/id_example2\
-    ~/.ssh/id_example3 632C9BB6CF21205A)"
-$ echo "test" | gpg2 --clearsign
-```
-
-Add the following to `.gitconfig`:
-
-
-```bash
-[commit]
-  gpgsign = true
-[gpg]
-  program = gpg2
-```
-
-and the following to `.gitconfig-xxxxxxx`
-
-
-```bash
-  signingkey = 632C9BB6CF21205A
-```
-
-!!! note
-    You might want to add the following to `~/.gnupg/gpg-agent.conf` if you tend
-    to use a long running session and wish to keep your GPG key cached:
-
-    ```bash
-    default-cache-ttl 31622400
-    max-cache-ttl 31622400
-    ```
-
 ### Setting up multiple Git profiles
 
 When using git as the version control tool for both personal and work related
@@ -98,6 +50,42 @@ $ cat .gitconfig-work
   prompt = false
 [icdiff]
   options = --highlight --line-numbers
+```
+
+### Automatically sign commits
+
+On Debian:
+
+```bash
+$ apt-get install gnupg2
+$ gpg2 --import file.asc
+$ gpg2 --list-secret-keys --keyid-format=long
+/root/.gnupg/pubring.kbx
+------------------------
+sec   rsa4096/632C9BB6CF21205A 2015-09-30 [SC]
+      6F2B0C373EBE0DD7975D51B9632C2AA6CF21205A
+uid                 [ unknown] John Doe <john.doe@personal.com>
+ssb   rsa4096/9C04F25B59B68D59 2015-09-30 [E]
+
+$ eval "$(keychain --stop others --quiet --quick --eval --agents gpg,ssh\
+    --inherit any --timeout 31622400 ~/.ssh/id_example1 ~/.ssh/id_example2\
+    ~/.ssh/id_example3 632C9BB6CF21205A)"
+$ echo "test" | gpg2 --clearsign
+```
+
+Add the following to `.gitconfig`:
+
+```bash
+[commit]
+  gpgsign = true
+[gpg]
+  program = gpg2
+```
+
+and the following to `.gitconfig-xxxxxxx`
+
+```bash
+  signingkey = 632C9BB6CF21205A
 ```
 
 ## Usage
