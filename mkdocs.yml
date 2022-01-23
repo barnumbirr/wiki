@@ -3,7 +3,7 @@ site_url: https://wiki.martinsimon.me
 repo_name: 'barnumbirr/wiki'
 repo_url: 'https://github.com/barnumbirr/wiki'
 copyright: |
-  Copyright &copy; 2021 Martin Simon
+  Copyright &copy; 2021-2022 Martin Simon
 
 plugins:
   - search
@@ -24,7 +24,7 @@ theme:
   custom_dir: overrides
   icon:
     logo: fontawesome/solid/book
-    repo: fontawesome/brands/github-alt
+    repo: fontawesome/brands/git-alt
   features:
     - navigation.instant
     - navigation.top
@@ -45,9 +45,6 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
-
-extra_css:
-  - stylesheets/extra.css
 
 extra:
   analytics:
