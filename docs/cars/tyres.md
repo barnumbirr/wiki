@@ -41,7 +41,7 @@ endurance / track longevity.
 - [Michelin Pilot Sport 4 S vs. Pilot Super Sport Tire Review - Sept. 2020](https://tflcar.com/2020/09/michelin-pilot-sport-4s-vs-super-sport-review/)
 - [Michelin Pilot Sport 4 vs Pilot Sport 4 S vs Cup 2 - Aug. 2018](https://www.youtube.com/watch?v=aMv64liOqIE)
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     Source: <a href="https://www.k-tecracing.com/show_product.asp?id=5626&appid=25">K-TEC Racing</a>
 </p>
 

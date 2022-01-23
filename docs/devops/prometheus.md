@@ -99,7 +99,7 @@ ExecStart=/usr/local/bin/prometheus \
       - example.com:127.0.0.1
 ```
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     Source: <a href="https://github.com/prometheus/blackbox_exporter/issues/51#issuecomment-385169368">prometheus/blackbox_exporter</a>
 </p>
 
@@ -148,6 +148,6 @@ API call:
 $ curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/clean_tombstones'
 ```
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     <a href="https://www.shellhacks.com/prometheus-delete-time-series-metrics"/>Source</a>
 </p>

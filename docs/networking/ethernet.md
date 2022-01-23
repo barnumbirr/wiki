@@ -47,7 +47,7 @@ for crossover wiring.
 |Cat. 7a  |10 Gbps        |1000 MHz       |100 m  40Gb at 50 m    |Yes       |10 Gbps Core Infrastructure |
 |Cat. 8   |25 Gbps (Cat8.1)40 Gbps (Cat8.2)|2000 MHz|30 m (98 ft.)|Yes       |25 Gbps/40 Gbps Core Infrastructure |
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     <a href="https://www.tripplite.com/products/ethernet-cable-types">Source</a>
 </p>
 
@@ -81,6 +81,6 @@ No sheathing is used. Standard Cat5e cable are examples of U/UTP cables.
 - **F**: Foil Shielding
 - **S**: Braided Shielding
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     <a href="https://planetechusa.com/demystifying-ethernet-types-difference-between-cat5e-cat-6-and-cat7/">Source</a>
 </p>

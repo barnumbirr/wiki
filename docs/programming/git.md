@@ -90,6 +90,19 @@ and the following to `.gitconfig-xxxxxxx`
 
 ## Usage
 
+### Anonymous Git commits
+
+From inside your local git repository:
+
+```bash
+$ git config user.name 'Anonymous'
+$ git config user.email '<>'
+```
+
+<p style="font-size: 12px" align="right">
+    Source: <a href="https://stackoverflow.com/a/48458633">Stackoverflow</a>
+</p>
+
 ### Squash last `<n>` commits
 
 If you want to write the new commit message from scratch, this suffices:
@@ -109,7 +122,7 @@ $ git commit --edit -m"$(git log --format=%B --reverse HEAD..HEAD@{1})"
 $ git push -f
 ```
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     Source: <a href="https://stackoverflow.com/a/5201642">Stackoverflow</a>
 </p>
 
@@ -138,7 +151,7 @@ Force push your changes.
 user@host:~$ git push -f
 ```
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     Source: <a href="https://stackoverflow.com/a/49900667">Stackoverflow</a>
 </p>
 

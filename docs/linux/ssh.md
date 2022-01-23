@@ -30,6 +30,6 @@ $ openssl pkcs8 -in aws_root -nocrypt -topk8 -outform DER | openssl sha1 -c
 (stdin)= 82:90:cb:b6:c4:ce:ee:e4:d5:f6:13:76:48:07:49:4d:a9:8d:cc:f2
 ```
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     Source: <a href="https://superuser.com/questions/421997/what-is-a-ssh-key-fingerprint-and-how-is-it-generated">superuser</a>
 </p>

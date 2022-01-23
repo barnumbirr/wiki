@@ -53,7 +53,7 @@ WantedBy=network-online.target
 !!! note
     This issue occurs on the [Helios64](../hardware/helios64.md).
 
-<p style="font-size: 10px" align="right">
+<p style="font-size: 12px" align="right">
     Source: <a href="https://wiki.archlinux.org/title/Systemd-networkd#systemd-networkd-wait-online">wiki.archlinux.org</a>
 </p>
 
