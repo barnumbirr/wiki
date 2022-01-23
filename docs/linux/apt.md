@@ -6,7 +6,9 @@ tags: [ 'APT', package', 'Debian', 'Ubuntu' ]
 
 # APT: Advanced Package Tool
 
-## Retrieve package information
+## Usage
+
+### Retrieve package information
 
 ```bash
 $ apt-cache show alacritty
@@ -28,7 +30,7 @@ Description-md5: bf8f7998a09797b3ab5c3dbd67703aa2
 Homepage: https://github.com/alacritty/alacritty
 ```
 
-## Retrieve package dependencies
+### Retrieve package dependencies
 
 ```bash
 $ apt-cache showpkg alacritty
@@ -49,7 +51,7 @@ Provides:
 Reverse Provides:
 ```
 
-## Retrieve package changelog
+### Retrieve package changelog
 
 ```bash
 $ apt changelog alacritty
@@ -75,7 +77,7 @@ alacritty (0.9.0-rc4-1) unstable; urgency=medium
 [...]
 ```
 
-## Replicate packages list on different hosts
+### Replicate packages list on different hosts
 
 On the source machine run:
 
