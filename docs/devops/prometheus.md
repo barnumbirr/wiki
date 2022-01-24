@@ -103,7 +103,7 @@ ExecStart=/usr/local/bin/prometheus \
     Source: <a href="https://github.com/prometheus/blackbox_exporter/issues/51#issuecomment-385169368">prometheus/blackbox_exporter</a>
 </p>
 
-## Maintenance
+## Usage
 
 ### Delete timeseries metrics
 

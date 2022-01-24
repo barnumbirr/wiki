@@ -4,7 +4,11 @@ date: 2021-08-30
 tags: [ 'bash', 'shell' ]
 ---
 
-## Temporarily disable alias
+# Bash — the Bourne Again SHell
+
+## Usage
+
+### Temporarily disable alias
 
 Let's assume you've set up a neat `ls` alias:
 

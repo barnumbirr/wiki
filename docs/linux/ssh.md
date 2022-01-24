@@ -4,7 +4,9 @@ date: 2021-09-15
 tags: [ 'ssh', 'shell', 'network', 'protocol', 'key', 'fingerprint' ]
 ---
 
-## Get SSH key fingerprint
+## Usage
+
+### Get SSH key fingerprint
 
 ```bash
 $ ssh-keygen -lf id_martinsimon.pub

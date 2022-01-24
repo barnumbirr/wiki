@@ -4,7 +4,9 @@ date: 2021-09-21
 tags: [ 'Google', 'Youtube', 'Vanced', 'ads' ]
 ---
 
-## Using YouTube™ Vanced with Google Workspace
+## Configuration
+
+### Using YouTube™ Vanced with Google Workspace
 
 Using Vanced in conjunction with a Google Workspace (formerly Google G Suite)
 account results in Vanced returning the error

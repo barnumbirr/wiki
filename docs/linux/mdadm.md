@@ -12,7 +12,9 @@ tags: [ 'mdadm', 'RAID', 'software', 'array', 'disk' ]
 $ apt-get install mdadm
 ```
 
-## Check software RAID array status
+## Usage
+
+### Check software RAID array status
 
 Use the following command:
 
@@ -57,9 +59,9 @@ md0 : active raid6 sde[4] sdb[1] sdd[3] sda[0] sdc[2]
 unused devices: <none>
 ```
 
-## Speed up software RAID resync
+### Speed up software RAID resync
 
-### Increase speed limits
+#### Increase speed limits
 
 Check current speed:
 
@@ -90,7 +92,7 @@ $ dev.raid.speed_limit_min = 50000
 $ dev.raid.speed_limit_max = 200000
 ```
 
-### Disable NCQ on all disks
+#### Disable NCQ on all disks
 
 ```bash
 for i in sd[abcde]
@@ -99,7 +101,7 @@ do
 done
 ```
 
-### Set read-ahead option
+#### Set read-ahead option
 
 Get the current read-ahead value:
 
@@ -113,7 +115,7 @@ Set read-ahead (in 512-byte sectors) per RAID device.
 $ blockdev --setra 65536 /dev/mdX
 ```
 
-### Increase stripe cache size
+#### Increase stripe cache size
 
 Records the size (in pages per device) of the stripe cache which is used for
 synchronising all write operations to the array and all read operations if the
