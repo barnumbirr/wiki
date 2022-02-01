@@ -49,17 +49,46 @@ $ make package/urbackup-server/compile -j$(nproc) V=s
 
 The build output will be available under `bin/targets/<arch>`.
 
-### Enabling debugging symbols when compililing package from source
+### Enabling debugging symbols when compiling package
 
-`Entware (OpenWrt)` does not support debugging on device and therefor strips
-all symbols during the installation phase of package creation. The only way to
-debug programs on device is to use unstripped binaries on the build host and
-`gdbserver` on device.
+`Entware (OpenWrt)` does not officially support debugging on device and therefor
+strips all symbols during package creation. The only way to debug programs on
+device is to use unstripped binaries on the build host and `gdbserver` on
+device.
 
 [Follow the instructions above](#compile-package-from-source) but stop before
 compiling the package.
 
-#### Enable compiling tools
+#### The easy way
+
+!!! danger
+    Here be dragons! This method is not officially supported and could have
+    unforeseen side effects.
+
+To disable the strip feature baked into Entware's
+[`rules.mk`](https://github.com/Entware/Entware/blob/master/rules.mk#L374), add
+
+
+```
+RSTRIP:=:
+```
+
+after
+
+```
+include $(INCLUDE_DIR)/package.mk
+```
+
+in your package's Makefile.
+
+<p style="font-size: 12px" align="right">
+    <a href="http://chenjingsi.com/programming/openwrt/openwrt-00008.html">Source</a>
+</p>
+
+
+#### The hard but official way
+
+##### Enable compiling tools
 
 In the directory the Entware repository was cloned to, run `menuconfig`
 
@@ -74,7 +103,7 @@ Advanced configuration options (for developers) > Toolchain Options > Build gdb
 Development > gdbserver
 ```
 
-#### Add debugging to package
+##### Add debugging to package
 
 Add CFLAGS to the package Makefile and recompile.
 
@@ -94,7 +123,7 @@ Or you can enable debug info in menuconfig
 Global build settings > Compile packages with debugging info
 ```
 
-#### Using the GNU debugger
+##### Using the GNU debugger
 
 Start `gdbserver` on the target device.
 
