@@ -65,6 +65,8 @@ compiling the package.
     Here be dragons! This method is not officially supported and could have
     unforeseen side effects.
 
+##### Disable Entware (OpenWrt) RSTRIP function
+
 To disable the strip feature baked into Entware's
 [`rules.mk`](https://github.com/Entware/Entware/blob/master/rules.mk#L374), add
 
