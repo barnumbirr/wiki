@@ -8,6 +8,15 @@ tags: [ 'APT', package', 'Debian', 'Ubuntu' ]
 
 ## Usage
 
+### Don't start service on installation
+
+To prevent the automatic start of system services during installation, set the
+`RUNLEVEL` environment variable.
+
+```bash
+RUNLEVEL=1 apt install -y <package>
+```
+
 ### Retrieve package information
 
 ```bash
