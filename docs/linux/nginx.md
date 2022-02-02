@@ -1,7 +1,7 @@
 ---
 title: 'Nginx'
 date: 2021-08-25
-tags: [ 'nginx', web', 'server' ]
+tags: [ 'nginx', 'web', 'server' ]
 ---
 
 ## Usage

@@ -1,7 +1,7 @@
 ---
 title: 'Entware'
 date: 2021-10-08
-tags: [ 'Entware', Optware', 'opkg', 'ipkg', 'package' ]
+tags: [ 'Entware', 'Optware', 'opkg', 'ipkg', 'package' ]
 ---
 
 ## Usage

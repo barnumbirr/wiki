@@ -1,7 +1,7 @@
 ---
 title: 'GRUB'
 date: 2021-10-04
-tags: [ 'grub', bootloader' ]
+tags: [ 'grub', 'bootloader' ]
 ---
 
 # GRUB - GRand Unified Bootloader

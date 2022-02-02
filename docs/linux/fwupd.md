@@ -1,7 +1,7 @@
 ---
 title: 'fwupd'
 date: 2021-08-25
-tags: [ 'firmware', bios', 'LVFS' ]
+tags: [ 'firmware', 'bios', 'LVFS' ]
 ---
 
 fwupd is a simple daemon allowing you to update some devices' firmware,

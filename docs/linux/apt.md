@@ -1,7 +1,7 @@
 ---
 title: 'apt'
 date: 2021-08-25
-tags: [ 'APT', package', 'Debian', 'Ubuntu' ]
+tags: [ 'APT', 'package', 'Debian', 'Ubuntu' ]
 ---
 
 # APT: Advanced Package Tool

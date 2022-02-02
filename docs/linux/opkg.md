@@ -1,7 +1,7 @@
 ---
 title: 'opkg'
 date: 2021-09-11
-tags: [ 'opkg', 'ipkg', package', 'Entware', 'Optware' ]
+tags: [ 'opkg', 'ipkg', 'package', 'Entware', 'Optware' ]
 ---
 
 `opkg` is a lightweight package manager designed to add software to stock
