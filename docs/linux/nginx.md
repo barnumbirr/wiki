@@ -46,6 +46,17 @@ http {
 [...]
 ```
 
+### Custom Nginx server name
+
+To customize the server name returned by Nginx, set the following in
+`/etc/nginx/nginx.conf`:
+
+```bash
+http {
+        more_set_headers 'Server: your_custom_server_name';
+}
+```
+
 ### Client certificate authentication
 
 #### OpenSSL coniguration
