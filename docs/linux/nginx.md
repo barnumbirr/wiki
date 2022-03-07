@@ -29,21 +29,9 @@ in HTTP response headers, turn off the `server_tokens` directive in the http
 context in the `/etc/nginx/nginx.conf` configuration file.
 
 ```bash
-[...]
 http {
-
-        ##
-        # Basic Settings
-        ##
-
-        sendfile on;
-        tcp_nopush on;
-        types_hash_max_size 2048;
         server_tokens off;
-
-        # server_names_hash_bucket_size 64;
-        # server_name_in_redirect off;
-[...]
+}
 ```
 
 ### Custom Nginx server name
@@ -65,7 +53,7 @@ Config file is `/etc/ssl/openssl.cnf`:
 
 ```bash
 [ ca ]
-default_ca = CA_default                 # The name of the CA configuration to be used. 
+default_ca = CA_default                 # The name of the CA configuration to be used.
                                         # can be anything that makes sense to you.
 [ CA_default ]
 dir = /etc/ssl/ca                       # Directory where everything is kept
