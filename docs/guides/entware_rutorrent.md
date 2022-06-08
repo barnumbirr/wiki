@@ -33,7 +33,8 @@ Create rTorrent configuration file:
 
 ```bash
 $ nano /share/data/.rtorrent/.rtorrent.rc
-network.scgi.open_port = 127.0.0.1:5000
+network.scgi.open_local = /var/run/.rtorrent.sock
+schedule2 = chmod_scgi_socket, 0, 0, "execute2=chmod,\"g+w,o=\",/var/run/.rtorrent.sock"
 encoding.add = UTF-8
 network.port_range.set = 49879-49879
 network.port_random.set = no
@@ -67,8 +68,8 @@ execute2 = {sh,-c,/opt/bin/php-cli /opt/share/www/rutorrent/php/initplugins.php 
 pieces.memory.max.set = 4096M
 
 # Log info
-log.open_file = "rtorrent.log", (cat,/opt/var/log/rtorrent.log)
-log.add_output = "debug", "rtorrent.log"
+# log.open_file = "rtorrent.log", (cat,/opt/var/log/rtorrent.log)
+# log.add_output = "debug", "rtorrent.log"
 ```
 
 Create rTorrent init file:
@@ -123,9 +124,11 @@ $pathToExternals = array(
     );
 
 $topDirectory = '/share/data/torrents';
-$scgi_port = 5000;
-$scgi_host = '127.0.0.1';
-$XMLRPCMountPoint = '/DEFAULT';
+
+$scgi_port = 0;
+$scgi_host = "unix:///var/run/.rtorrent.sock";
+
+$XMLRPCMountPoint = '/RPC2';
 ```
 
 #### Configure `create` plugin
@@ -329,25 +332,25 @@ server {
 
     client_max_body_size 64M;
 
-    location ^~ /DEFAULT {
-        index index.php index.html index.htm;
-        try_files $uri $uri/ /index.html;
+    error_page 500 502 503 504 /50x.html;
+
+    location /RPC2 {
         include scgi_params;
-        scgi_pass 127.0.0.1:5000;
-        #scgi_pass unix:/var/run/helios/rtorrent.sock;
+        #scgi_pass 127.0.0.1:5000;
+        scgi_pass unix:/var/run/.rtorrent.sock;
     }
 
-    location ^~ /conf/ {
-        deny all;
+    location = /50x.html {
+        root /usr/share/nginx/html;
     }
 
-    location ^~ /share/ {
-        deny all;
-    }
-
-    location ~* \.(jpg|jpeg|gif|css|png|js|map|woff|woff2|ttf|svg|eot)$ {
-        expires 30d;
+    location = /favicon.ico {
         access_log off;
+        log_not_found off;
+    }
+
+    location ~ ^/(conf|share)/(.+)$ {
+        deny all;
     }
 
     location ~ \.php$ {
@@ -365,6 +368,11 @@ server {
         fastcgi_pass unix:/opt/var/run/php7-fpm.sock;
         fastcgi_intercept_errors on;
         fastcgi_request_buffering off;
+    }
+
+    location ~* \.(jpg|jpeg|gif|css|png|js|map|woff|woff2|ttf|svg|eot)$ {
+        expires 30d;
+        access_log off;
     }
 }
 ```
