@@ -17,7 +17,7 @@ $ opkg install bash curl ffmpeg git git-http gzip htop iotop mediainfo mktorrent
 nano nginx-ssl php7 php7-cli php7-fpm php7-mod-ctype php7-mod-curl\
 php7-mod-session php7-mod-bcmath php7-mod-phar php7-mod-filter php7-mod-json\
 php7-mod-opcache php7-mod-xml procps-ng-pgrep python3 python3-pip rtorrent-rpc\
-screen socat unrar unzip wget-ssl
+socat unrar unzip wget-ssl
 ```
 
 ### Configure rTorrent
@@ -33,6 +33,7 @@ Create rTorrent configuration file:
 
 ```bash
 $ nano /share/data/.rtorrent/.rtorrent.rc
+system.daemon.set = true
 network.scgi.open_local = /var/run/.rtorrent.sock
 schedule2 = chmod_scgi_socket, 0, 0, "execute2=chmod,\"g+w,o=\",/var/run/.rtorrent.sock"
 encoding.add = UTF-8
@@ -82,9 +83,13 @@ $ nano /opt/etc/init.d/S85rtorrent
 ENABLED=yes
 PROCS=rtorrent
 ARGS="-D -n -o import=/share/data/.rtorrent/.rtorrent.rc"
-PREARGS="screen -dmS rtorrent"
+PREARGS=""
 DESC=$PROCS
 PATH=/opt/sbin:/opt/bin:/opt/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+if [ -z "`ps aux | grep rtorrent | grep -v grep | awk '{print $1}'`" ]; then
+    rm -f /var/run/.rtorrent.sock
+fi
 
 . /opt/etc/init.d/rc.func
 ```
@@ -170,10 +175,10 @@ For PHP-FPM:
 $ nano /opt/etc/php7-fpm.d/www.conf
 user = admin
 listen.owner = admin
-pm.max_children = 25
-pm.start_servers = 4
-pm.min_spare_servers = 3
-pm.max_spare_servers = 5
+pm.max_children = 30
+pm.start_servers = 7
+pm.min_spare_servers = 5
+pm.max_spare_servers = 9
 env[PATH] = /opt/bin:/opt/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin
 ```
 
