@@ -146,8 +146,33 @@ $pathToCreatetorrent = '/opt/bin/mktorrent';
 
 #### Install `cloudscraper` plugin
 
+`cloudscraper` is a dependency of the `_cloudflare` plugin.
+
 ```bash
 $ pip3 install cloudscraper
+```
+
+#### Install `ratiocolor` plugin
+
+```bash
+$ cd /opt/share/www/rutorrent/plugins
+$ git clone git@github.com:Micdu70/rutorrent-ratiocolor.git ratiocolor
+```
+
+#### Install `geoip2` plugin
+
+```bash
+$ cd /opt/share/www/rutorrent/plugins
+$ git clone git@github.com:Micdu70/geoip2-rutorrent.git geoip2
+```
+
+#### Install `nfo` plugin
+
+```bash
+$ cd /opt/share/www/rutorrent/plugins
+$ git clone git@github.com:phracker/ruTorrent-nfo.git nfo
+# Fix for ruTorrent v4.0+
+$ sed -i 's/cachedEcho/CachedEcho::send/' nfo/action.php
 ```
 
 !!! hint
