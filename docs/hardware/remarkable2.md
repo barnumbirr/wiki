@@ -10,7 +10,7 @@ The Remarkable 2 or why you won't ever need paper notebooks again.
 
 ### Linux kernel
 
-Running [`Software release 2.12`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
+Running [`Software release 2.13`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
 
 ```bash
 $ uname -a
