@@ -33,65 +33,185 @@ Create rTorrent configuration file:
 
 ```bash
 $ nano /share/data/.rtorrent/.rtorrent.rc
+## Run rtorrent as a daemon (disables user interface, only XMLRPC control)
 system.daemon.set = true
-network.scgi.open_local = /var/run/.rtorrent.sock
-schedule2 = chmod_scgi_socket, 0, 0, "execute2=chmod,\"g+w,o=\",/var/run/.rtorrent.sock"
-encoding.add = UTF-8
-network.port_range.set = 49879-49879
+
+## Control rtorrent via UNIX XMLRPC socket
+network.scgi.open_local = (cat, "/var/run/.rtorrent.sock")
+execute.nothrow = chmod, 770, (cat, "/var/run/.rtorrent.sock")
+
+## Listening port for incoming peer traffic, don't randomize
 network.port_random.set = no
-pieces.hash.on_completion.set = no
+network.port_range.set = 49879-49879
+
+## Set default data save directory, session file path
 directory.default.set = /share/data/torrents
 session.path.set = /share/data/.rtorrent/.session
-protocol.encryption.set = allow_incoming, try_outgoing, enable_retry
-schedule2 = watch_directory,1,1,load.start=/share/data/.rtorrent/watch/*.torrent
-schedule2 = untied_directory,5,5,stop_untied=/share/data/.rtorrent/watch/*.torrent
-schedule2 = low_diskspace,1,30,close_low_diskspace=50G
-schedule2 = session_save, 240, 300, ((session.save))
-trackers.use_udp.set = yes
+
+## Disable UDP protocol to trackers, disable DHT/PEX BitTorrent protocols and enable traffic encryption if possible
+trackers.use_udp.set = no
 dht.mode.set = off
 protocol.pex.set = no
-throttle.min_peers.normal.set = 40
-throttle.max_peers.normal.set = 100
-throttle.min_peers.seed.set = 10
-throttle.max_peers.seed.set = 50
-throttle.max_uploads.set = 15
+protocol.encryption.set = allow_incoming, try_outgoing, enable_retry
+
+## Preferred filename encoding
+encoding.add = UTF-8
+
+## Disable hash check on torrents that have finished downloading (intensive process)
+pieces.hash.on_completion.set = no
+
+## Minimum and maximum number of peers to connect to per torrent while downloading.
+throttle.min_peers.normal.set = 32
+throttle.max_peers.normal.set = 64
+
+## Minimum and maximum number of peers to connect to per torrent while seeding. (-1 for same value as above)
+throttle.min_peers.seed.set = -1
+throttle.max_peers.seed.set = -1
+
+## Maximum number of simultaneous downloads and uploads slots per torrent
+throttle.max_downloads.set = 32
+throttle.max_uploads.set = 32
+
+## Memory address space to map file chunks.
+pieces.memory.max.set = 2048M
+
+## Watch directory, saving a torrent file to this directory will automatically start the download.
+schedule2 = watch_directory, 5, 5, load.start=/share/data/.rtorrent/watch/*.torrent
+schedule2 = untied_directory, 5, 5, stop_untied=/share/data/.rtorrent/watch/*.torrent
+
+## Stop rtorrent from downloading data when disk space is low.
+schedule2 = low_diskspace, 15, 60, ((close_low_diskspace, 50G))
+
+## Save rtorrent session data every 5 minutes (default: 20min)
+schedule2 = session_save, 300, 300, ((session.save))
+
+## Initialize ruTorrent plugins
 execute2 = {sh,-c,/opt/bin/php-cli /opt/share/www/rutorrent/php/initplugins.php &}
 
-#min_peers = 1
-#max_peers = 512
-#min_peers_seed = -1
-#max_peers_seed = -1
-#max_uploads = 512
-#download_rate = 0
-#upload_rate = 0
-#network.max_open_files.set = 1024
-#network.http.max_open.set = 512
-pieces.memory.max.set = 4096M
-
+## Logging:
+## levels = critical error warn notice info debug
+## groups = connection_* dht_* peer_* rpc_* storage_* thread_* tracker_* torrent_
 # Log info
-# log.open_file = "rtorrent.log", (cat,/opt/var/log/rtorrent.log)
-# log.add_output = "debug", "rtorrent.log"
+# log.open_file = "logfile", (cat,/opt/var/log/rtorrent.log)
+# log.add_output = "debug", "logfile"
+# log.add_output = "tracker_debug", "logfile"
 ```
 
 Create rTorrent init file:
+
+!!! Note
+    This init file is heavily inspired by Entware's
+    `/opt/etc/init.d/rc.func`.
 
 
 ```bash
 $ nano /opt/etc/init.d/S85rtorrent
 #!/bin/sh
 
-ENABLED=yes
 PROCS=rtorrent
 ARGS="-D -n -o import=/share/data/.rtorrent/.rtorrent.rc"
-PREARGS=""
 DESC=$PROCS
 PATH=/opt/sbin:/opt/bin:/opt/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-if [ -z "`ps aux | grep rtorrent | grep -v grep | awk '{print $1}'`" ]; then
-    rm -f /var/run/.rtorrent.sock
-fi
+ansi_red="\033[1;31m";
+ansi_white="\033[1;37m";
+ansi_green="\033[1;32m";
+ansi_yellow="\033[1;33m";
+ansi_blue="\033[1;34m";
+ansi_bell="\007";
+ansi_blink="\033[5m";
+ansi_std="\033[m";
+ansi_rev="\033[7m";
+ansi_ul="\033[4m";
 
-. /opt/etc/init.d/rc.func
+ACTION=$1
+
+start() {
+    echo -e -n "$ansi_white Starting $DESC... $ansi_std"
+    if [ -n "$(pgrep -x -f "$PROC $ARGS")" ]; then
+        echo -e "            $ansi_yellow already running. $ansi_std"
+        return 0
+    fi
+    $PROC $ARGS > /dev/null 2>&1 &
+    COUNTER=0
+    LIMIT=10
+    while [ -z "$(pgrep -x -f "$PROC $ARGS")" -a "$COUNTER" -le "$LIMIT" ]; do
+        sleep 1;
+        COUNTER=$((COUNTER + 1))
+    done
+
+    if [ -z "$(pgrep -x -f "$PROC $ARGS")" ]; then
+        echo -e "            $ansi_red failed. $ansi_std"
+        logger "Failed to start $DESC from $CALLER."
+        return 255
+    else
+        echo -e "            $ansi_green done. $ansi_std"
+        logger "Started $DESC from $CALLER."
+        return 0
+    fi
+}
+
+stop() {
+    case "$ACTION" in
+        stop | restart)
+            echo -e -n "$ansi_white Shutting down $PROC... $ansi_std"
+            kill "$(pgrep -x -f "$PROC $ARGS")" 2>/dev/null
+            COUNTER=0
+            LIMIT=10
+            while [ -n "$(pgrep -x -f "$PROC $ARGS")" -a "$COUNTER" -le "$LIMIT" ]; do
+                sleep 1;
+                COUNTER=$((COUNTER + 1))
+            done
+            rm /var/run/.rtorrent.sock
+            ;;
+        kill)
+            echo -e -n "$ansi_white Killing $PROC... $ansi_std"
+            kill -9 "$(pgrep -x -f "$PROC $ARGS")" 2>/dev/null
+            rm /var/run/.rtorrent.sock
+            ;;
+    esac
+
+    if [ -n "$(pgrep -x -f "$PROC $ARGS")" ]; then
+        echo -e "       $ansi_red failed. $ansi_std"
+        return 255
+    else
+        echo -e "       $ansi_green done. $ansi_std"
+        return 0
+    fi
+}
+
+check() {
+    echo -e -n "$ansi_white Checking $DESC... "
+    if [ -n "$(pgrep -x -f "$PROC $ARGS")" ]; then
+        echo -e "            $ansi_green alive. $ansi_std";
+        return 0
+    else
+        echo -e "            $ansi_red dead. $ansi_std";
+        return 1
+    fi
+}
+
+for PROC in $PROCS; do
+    case $ACTION in
+        start)
+            start
+            ;;
+        stop | kill )
+            check && stop
+            ;;
+        restart)
+            check > /dev/null && stop
+            start
+            ;;
+        check)
+            check
+            ;;
+        *)
+            echo -e "$ansi_white Usage: $0 (start|stop|restart|check)$ansi_std"
+            exit 1
+            ;;
+    esac
+done
 ```
 
 Then run:
@@ -107,11 +227,12 @@ $ cd /opt/share/www/
 $ git clone https://github.com/Novik/ruTorrent.git rutorrent
 ```
 
-#### Create ruTorrent user config
+#### Create ruTorrent 'user' config
+
+We're not creating any ruTorrent users so we'll edit the default `config.php` file.
 
 ```bash
-$ mkdir /opt/share/www/rutorrent/conf/users/default
-$ nano /opt/share/www/rutorrent/conf/users/default/config.php
+$ nano /opt/share/www/rutorrent/conf/config.php
 ```
 
 Add the following:
@@ -119,21 +240,115 @@ Add the following:
 
 ```php
 <?php
+        // configuration parameters
 
-$pathToExternals = array(
-    "curl"  => '/opt/bin/curl',
-    "stat"  => '/opt/bin/stat',
-    "php"    => '/opt/bin/php-cli',
-    "pgrep"  => '/opt/bin/pgrep',
-    "python" => '/opt/bin/python3'
-    );
+        // for snoopy client
+        @define('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36', true);
+        @define('HTTP_TIME_OUT', 30, true);     // in seconds
+        @define('HTTP_USE_GZIP', true, true);
+        $httpIP = null;                         // IP string. Or null for any.
+        $httpProxy = array
+        (
+                'use'   => false,
+                'proto' => 'http',              // 'http' or 'https'
+                'host'  => 'PROXY_HOST_HERE',
+                'port'  => 3128
+        );
 
-$topDirectory = '/share/data/torrents';
+        @define('RPC_TIME_OUT', 5, true);       // in seconds
 
-$scgi_port = 0;
-$scgi_host = "unix:///var/run/.rtorrent.sock";
+        @define('LOG_RPC_CALLS', false, true);
+        @define('LOG_RPC_FAULTS', true, true);
 
-$XMLRPCMountPoint = '/RPC2';
+        // for php
+        @define('PHP_USE_GZIP', false, false);
+        @define('PHP_GZIP_LEVEL', 2, true);
+
+        $schedule_rand = 10;                    // rand for schedulers start, +0..X seconds
+
+        $do_diagnostic = true;
+        $log_file = '/tmp/errors.log';          // path to log file (comment or leave blank to disable logging)
+
+        $saveUploadedTorrents = true;           // Save uploaded torrents to profile/torrents directory or not
+        $overwriteUploadedTorrents = false;     // Overwrite existing uploaded torrents in profile/torrents directory or make unique name
+
+        $topDirectory = '/share/data/torrents'; // Upper available directory. Absolute path with trail slash.
+        $forbidUserSettings = false;
+
+        $scgi_port = 0;
+        $scgi_host = "unix:///var/run/.rtorrent.sock";
+
+        $XMLRPCMountPoint = "/RPC2";            // DO NOT DELETE THIS LINE!!! DO NOT COMMENT THIS LINE!!!
+
+        $pathToExternals = array(
+                "curl"   => '/opt/bin/curl',
+                "id"     => '/usr/bin/id',
+                "php"    => '/opt/bin/php-cli',
+                "pgrep"  => '/opt/bin/pgrep',
+                "python" => '/opt/bin/python3',
+                "stat"   => '/opt/bin/stat'
+        );
+
+        $localhosts = array(                    // list of local interfaces
+                "127.0.0.1",
+                "localhost",
+        );
+
+        $profilePath = '../../share';           // Path to user profiles
+        $profileMask = 0777;                    // Mask for files and directory creation in user profiles.
+                                                // Both Webserver and rtorrent users must have read-write access to it.
+                                                // For example, if Webserver and rtorrent users are in the same group then the value may be 0770.
+
+        $tempDirectory = null;                  // Temp directory. Absolute path with trail slash. If null, then autodetect will be used.
+
+        $canUseXSendFile = false;               // If true then use X-Sendfile feature if it exist
+
+        $locale = "UTF8";
+
+        $enableCSRFCheck = false;               // If true then Origin and Referer will be checked
+        $enabledOrigins = array();              // List of enabled domains for CSRF check (only hostnames, without protocols, port etc.).
+                                                // If empty, then will retrieve domain from HTTP_HOST / HTTP_X_FORWARDED_HOST
+```
+
+Configure ruTorrent plugins follows:
+
+
+```
+$ nano /opt/share/www/rutorrent/conf/plugins.ini
+[default]
+enabled = user-defined
+canChangeToolbar = yes
+canChangeMenu = yes
+canChangeOptions = yes
+canChangeTabs = yes
+canChangeColumns = yes
+canChangeStatusBar = yes
+canChangeCategory = yes
+canBeShutdowned = yes
+
+[ipad]
+enabled = no
+
+[httprpc]
+enabled = no
+
+[retrackers]
+enabled = no
+
+[rpc]
+enabled = no
+
+[rutracker_check]
+enabled = no
+
+[geoip]
+enabled = no
+
+[geoip2]
+enabled = yes
+
+[spectrogram]
+enabled = no
 ```
 
 #### Configure `create` plugin
@@ -366,12 +581,11 @@ server {
 
     location /RPC2 {
         include scgi_params;
-        #scgi_pass 127.0.0.1:5000;
         scgi_pass unix:/var/run/.rtorrent.sock;
     }
 
     location = /50x.html {
-        root /usr/share/nginx/html;
+        root /opt/share/nginx/html;
     }
 
     location = /favicon.ico {
@@ -386,13 +600,12 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
-        #fastcgi_split_path_info ^(.+\.(?:php|phar))(/.*)$;
         include fastcgi_params;
         fastcgi_index  index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
         fastcgi_param HTTPS on;
-        #Avoid sending the security headers twice
+        # Avoid sending the security headers twice
         fastcgi_param modHeadersAvailable true;
         fastcgi_param front_controller_active true;
         fastcgi_pass unix:/opt/var/run/php7-fpm.sock;
