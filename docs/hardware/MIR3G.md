@@ -8,12 +8,16 @@ tags: [ 'Xiaomi', 'router']
 
 ### Linux kernel
 
-Running [`Padavan 3.4.3.9L-101_e662678`](https://gitlab.com/dm38/padavan-ng/-/commit/e6626783dcba5cc2dda67d6118ecb5b132d639b8).
+Running [`Padavan 3.4.3.9L-101_3dbb564`](https://gitlab.com/mahtabctg/padavan-ng/-/tree/3dbb5649b65f494dcfa0f61e4df0ef57642e9cf0).
 
 ```bash
 $ uname -a
 Linux ap1 3.4.113 #1 SMP Sat May 15 10:43:11 +07 2021 mips GNU/Linux
 ```
+
+??? "Older versions"
+
+    Running [`Padavan 3.4.3.9L-101_e662678`](https://gitlab.com/dm38/padavan-ng/-/commit/e6626783dcba5cc2dda67d6118ecb5b132d639b8).
 
 ### CPU information
 
