@@ -14,10 +14,10 @@ tags: [ 'Entware', rTorrent', 'rutorrent', 'nginx', 'php' ]
 
 ```bash
 $ opkg install bash curl ffmpeg git git-http gzip htop iotop mediainfo mktorrent\
-nano nginx-ssl php7 php7-cli php7-fpm php7-mod-ctype php7-mod-curl\
-php7-mod-session php7-mod-bcmath php7-mod-phar php7-mod-filter php7-mod-json\
-php7-mod-opcache php7-mod-xml procps-ng-pgrep python3 python3-pip rtorrent-rpc\
-socat unrar unzip wget-ssl
+nano nginx-ssl php8 php8-cli php8-fpm php8-mod-bcmath php8-mod-ctype\
+php8-mod-curl php8-mod-filter php8-mod-opcache php8-mod-phar php8-mod-session\
+php8-mod-xml procps-ng-pgrep python3 python3-pip  rtorrent-rpcsocat unrar\
+unzip wget-ssl
 ```
 
 ### Configure rTorrent
@@ -403,30 +403,25 @@ For PHP:
 $ nano /opt/etc/php.ini
 memory_limit = 128M
 ;doc_root = "/opt/share/www"
-upload_max_filesize = 16M
+upload_max_filesize = 64M
 max_file_uploads = 64
-date.timezone = Europe/Luxembourg
+date.timezone = "Europe/Luxembourg"
 sys_temp_dir = "/opt/tmp"
 ```
 
 For PHP-FPM:
 
 ```bash
-$ nano /opt/etc/php7-fpm.d/www.conf
+$ nano /opt/etc/php8-fpm.d/www.conf
 user = admin
-listen.owner = admin
-pm.max_children = 30
-pm.start_servers = 7
-pm.min_spare_servers = 5
-pm.max_spare_servers = 9
 env[PATH] = /opt/bin:/opt/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin
 ```
 
 #### Allow PHP-FPM to run as root
 
 ```bash
-$ nano /opt/etc/init.d/S79php7-fpm
-ARGS="--daemonize -R --fpm-config /opt/etc/php7-fpm.conf"
+$ nano /opt/etc/init.d/S79php8-fpm
+ARGS="--daemonize -R --fpm-config /opt/etc/php8-fpm.conf"
 ```
 
 !!! note
@@ -456,8 +451,10 @@ http {
 
     sendfile on;
     tcp_nopush on;
-    tcp_nodelay on;
+    tcp_nodelay off;
     keepalive_timeout 65;
+    keepalive_requests 100;
+    keepalive_disable msie6;
     types_hash_max_size 2048;
     server_tokens off;
 
@@ -487,6 +484,7 @@ http {
 
     gzip on;
     gzip_disable "msie6";
+    gzip_min_length 512;
     gzip_vary on;
     gzip_proxied any;
     gzip_comp_level 6;
@@ -514,7 +512,6 @@ http {
     include /opt/etc/nginx/conf.d/*.conf;
     include /opt/etc/nginx/sites-enabled/*;
 }
-
 ```
 
 #### Configure Nginx SCGI
@@ -608,7 +605,7 @@ server {
         # Avoid sending the security headers twice
         fastcgi_param modHeadersAvailable true;
         fastcgi_param front_controller_active true;
-        fastcgi_pass unix:/opt/var/run/php7-fpm.sock;
+        fastcgi_pass unix:/opt/var/run/php8-fpm.sock;
         fastcgi_intercept_errors on;
         fastcgi_request_buffering off;
     }
@@ -667,7 +664,7 @@ $ wget https://ssl-config.mozilla.org/ffdhe4096.txt -O /opt/etc/acme.sh/rutorren
 ### Restart services
 
 ```bash
-$ /opt/etc/init.d/S79php7-fpm restart
+$ /opt/etc/init.d/S79php8-fpm restart
 $ /opt/etc/init.d/S80nginx restart
 $ /opt/etc/init.d/S85rtorrent start
 ```
