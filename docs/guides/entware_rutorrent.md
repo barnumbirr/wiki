@@ -37,8 +37,8 @@ $ nano /share/data/.rtorrent/.rtorrent.rc
 system.daemon.set = true
 
 ## Control rtorrent via UNIX XMLRPC socket
-network.scgi.open_local = (cat, "/var/run/.rtorrent.sock")
-execute.nothrow = chmod, 770, (cat, "/var/run/.rtorrent.sock")
+network.scgi.open_local = (cat, "/opt/var/run/rtorrent.sock")
+execute.nothrow = chmod, 770, (cat, "/opt/var/run/rtorrent.sock")
 
 ## Listening port for incoming peer traffic, don't randomize
 network.port_random.set = no
@@ -162,12 +162,12 @@ stop() {
                 sleep 1;
                 COUNTER=$((COUNTER + 1))
             done
-            rm /var/run/.rtorrent.sock
+            rm /opt/var/run/rtorrent.sock
             ;;
         kill)
             echo -e -n "$ansi_white Killing $PROC... $ansi_std"
             kill -9 "$(pgrep -x -f "$PROC $ARGS")" 2>/dev/null
-            rm /var/run/.rtorrent.sock
+            rm /opt/var/run/rtorrent.sock
             ;;
     esac
 
@@ -276,7 +276,7 @@ Add the following:
         $forbidUserSettings = false;
 
         $scgi_port = 0;
-        $scgi_host = "unix:///var/run/.rtorrent.sock";
+        $scgi_host = "unix:///opt/var/run/rtorrent.sock";
 
         $XMLRPCMountPoint = "/RPC2";            // DO NOT DELETE THIS LINE!!! DO NOT COMMENT THIS LINE!!!
 
@@ -578,7 +578,7 @@ server {
 
     location /RPC2 {
         include scgi_params;
-        scgi_pass unix:/var/run/.rtorrent.sock;
+        scgi_pass unix:/opt/var/run/rtorrent.sock;
     }
 
     location = /50x.html {
