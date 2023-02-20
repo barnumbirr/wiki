@@ -10,11 +10,11 @@ The Remarkable 2 or why you won't ever need paper notebooks again.
 
 ### Linux kernel
 
-Running [`Software release 2.13`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
+Running [`Software release 2.15`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
 
 ```bash
 $ uname -a
-Linux reMarkable 5.4.70-v1.1.5-rm11x #1 SMP PREEMPT Fri Nov 12 14:59:18 UTC 2021 armv7l GNU/Linux
+Linux reMarkable 5.4.70-v1.2.5-rm11x #1 SMP PREEMPT Sun Oct 23 20:48:32 UTC 2022 armv7l GNU/Linux
 ```
 
 ??? "Older versions"
