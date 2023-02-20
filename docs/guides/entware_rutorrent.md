@@ -243,9 +243,9 @@ Add the following:
         // configuration parameters
 
         // for snoopy client
-        @define('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36', true);
-        @define('HTTP_TIME_OUT', 30, true);     // in seconds
-        @define('HTTP_USE_GZIP', true, true);
+        $httpUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36';
+        $httpTimeOut = 30;                      // in seconds
+        $httpUseGzip = true;
         $httpIP = null;                         // IP string. Or null for any.
         $httpProxy = array
         (
@@ -255,39 +255,54 @@ Add the following:
                 'port'  => 3128
         );
 
-        @define('RPC_TIME_OUT', 5, true);       // in seconds
-
-        @define('LOG_RPC_CALLS', false, true);
-        @define('LOG_RPC_FAULTS', true, true);
+        // for xmlrpc actions
+        $rpcTimeOut = 5;                        // in seconds
+        $rpcLogCalls = false;
+        $rpcLogFaults = true;
 
         // for php
-        @define('PHP_USE_GZIP', false, false);
-        @define('PHP_GZIP_LEVEL', 2, true);
+        $phpUseGzip = false;
+        $phpGzipLevel = 2;
 
         $schedule_rand = 10;                    // rand for schedulers start, +0..X seconds
 
-        $do_diagnostic = true;
-        $log_file = '/tmp/errors.log';          // path to log file (comment or leave blank to disable logging)
+        $do_diagnostic = false;                  // Diagnose ruTorrent. Recommended to keep enabled, unless otherwise required.
+        $al_diagnostic = false;                  // Diagnose auto-loader. Set to "false" to make composer plugins work.
+
+        $log_file = '/opt/var/log/rutorrent/errors.log';          // path to log file (comment or leave blank to disable logging)
 
         $saveUploadedTorrents = true;           // Save uploaded torrents to profile/torrents directory or not
         $overwriteUploadedTorrents = false;     // Overwrite existing uploaded torrents in profile/torrents directory or make unique name
 
-        $topDirectory = '/share/data/torrents'; // Upper available directory. Absolute path with trail slash.
+        $topDirectory = '/share/data/torrents';                    // Upper available directory. Absolute path with trail slash.
         $forbidUserSettings = false;
 
         $scgi_port = 0;
         $scgi_host = "unix:///opt/var/run/rtorrent.sock";
 
+        // For web->rtorrent link through unix domain socket
+        // (scgi_local in rtorrent conf file), change variables
+        // above to something like this:
+        //
+        // $scgi_port = 0;
+        // $scgi_host = "unix:///tmp/rpc.socket";
+
         $XMLRPCMountPoint = "/RPC2";            // DO NOT DELETE THIS LINE!!! DO NOT COMMENT THIS LINE!!!
+
+        $throttleMaxSpeed = 327625*1024;        // DO NOT EDIT THIS LINE!!! DO NOT COMMENT THIS LINE!!!
+        // Can't be greater then 327625*1024 due to limitation in libtorrent ResourceManager::set_max_upload_unchoked function.
 
         $pathToExternals = array(
                 "curl"   => '/opt/bin/curl',
+                "gzip"   => '/opt/bin/gzip',
                 "id"     => '/usr/bin/id',
                 "php"    => '/opt/bin/php-cli',
                 "pgrep"  => '/opt/bin/pgrep',
                 "python" => '/opt/bin/python3',
                 "stat"   => '/opt/bin/stat'
         );
+
+        $localHostedMode = true;               // Set to true if rTorrent is hosted on the SAME machine as ruTorrent
 
         $localhosts = array(                    // list of local interfaces
                 "127.0.0.1",
