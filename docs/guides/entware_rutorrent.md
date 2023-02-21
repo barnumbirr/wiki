@@ -261,13 +261,13 @@ Add the following:
         $rpcLogFaults = true;
 
         // for php
-        $phpUseGzip = false;
+        $phpUseGzip = true;
         $phpGzipLevel = 2;
 
         $schedule_rand = 10;                    // rand for schedulers start, +0..X seconds
 
-        $do_diagnostic = false;                  // Diagnose ruTorrent. Recommended to keep enabled, unless otherwise required.
-        $al_diagnostic = false;                  // Diagnose auto-loader. Set to "false" to make composer plugins work.
+        $do_diagnostic = true;                  // Diagnose ruTorrent. Recommended to keep enabled, unless otherwise required.
+        $al_diagnostic = true;                  // Diagnose auto-loader. Set to "false" to make composer plugins work.
 
         $log_file = '/opt/var/log/rutorrent/errors.log';          // path to log file (comment or leave blank to disable logging)
 
@@ -302,7 +302,8 @@ Add the following:
                 "stat"   => '/opt/bin/stat'
         );
 
-        $localHostedMode = true;               // Set to true if rTorrent is hosted on the SAME machine as ruTorrent
+        $localHostedMode = true;                // Set to true if rTorrent is hosted on the SAME machine as ruTorrent
+        $cachedPluginLoading = true;            // Set to true to enable rapid cached loading of ruTorrent plugins
 
         $localhosts = array(                    // list of local interfaces
                 "127.0.0.1",
