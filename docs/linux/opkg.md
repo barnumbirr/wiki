@@ -33,3 +33,31 @@ Update `opkg` repository URL:
 ```bash
 $ sed -i 's/http:\/\//https:\/\//g' /opt/etc/opkg.conf
 ```
+
+## Usage
+
+### Fix broken packages after `opkg upgrade`
+
+```bash
+$ opkg update
+$ opkg upgrade
+$ minidlna
+  minidlna: error while loading shared libraries: libpng12.so.0: cannot open shared object file: No such file or director
+```
+
+Unfortunately, opkg isn't sophisticated enough to react to the fact that the
+minidlna dependencies have changed and that minidlna should be re-installed too.
+Instead, you have to do that manually:
+
+
+```bash
+$ opkg --autoremove remove minidlna
+$ opkg install minidlna
+```
+
+As a last resort, if the solution provided above doesn't work, try the following:
+
+
+```bash
+$ opkg list-installed | grep -v "libc " | sed 's/ - .*$//' | grep ^lib | grep -v libpthread | grep -v libgcc | xargs -n 5 opkg --force-reinstall install
+```
