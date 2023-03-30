@@ -16,7 +16,7 @@ tags: [ 'Entware', rTorrent', 'rutorrent', 'nginx', 'php' ]
 $ opkg install bash curl ffmpeg git git-http gzip htop iotop mediainfo mktorrent\
 nano nginx-ssl php8 php8-cli php8-fpm php8-mod-bcmath php8-mod-ctype\
 php8-mod-curl php8-mod-filter php8-mod-opcache php8-mod-phar php8-mod-session\
-php8-mod-xml procps-ng-pgrep python3 python3-pip  rtorrent-rpcsocat unrar\
+php8-mod-xml procps-ng-pgrep python3 python3-pip rtorrent-rpc socat unrar\
 unzip wget-ssl
 ```
 
