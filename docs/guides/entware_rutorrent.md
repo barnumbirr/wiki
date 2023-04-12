@@ -269,13 +269,16 @@ Add the following:
         $do_diagnostic = true;                  // Diagnose ruTorrent. Recommended to keep enabled, unless otherwise required.
         $al_diagnostic = true;                  // Diagnose auto-loader. Set to "false" to make composer plugins work.
 
-        $log_file = '/opt/var/log/rutorrent/errors.log';          // path to log file (comment or leave blank to disable logging)
+        $log_file = '/opt/var/log/rutorrent/errors.log';                // path to log file (comment or leave blank to disable logging)
 
         $saveUploadedTorrents = true;           // Save uploaded torrents to profile/torrents directory or not
         $overwriteUploadedTorrents = false;     // Overwrite existing uploaded torrents in profile/torrents directory or make unique name
 
-        $topDirectory = '/share/data/torrents';                    // Upper available directory. Absolute path with trail slash.
+        $topDirectory = '/share/data/torrents/';                        // Upper available directory. Absolute path with trail slash.
         $forbidUserSettings = false;
+
+        // $scgi_port = 5000;
+        // $scgi_host = "127.0.0.1";
 
         $scgi_port = 0;
         $scgi_host = "unix:///opt/var/run/rtorrent.sock";
@@ -304,6 +307,13 @@ Add the following:
 
         $localHostedMode = true;                // Set to true if rTorrent is hosted on the SAME machine as ruTorrent
         $cachedPluginLoading = true;            // Set to true to enable rapid cached loading of ruTorrent plugins
+        $pluginJSCacheExpire = 3*60;            // Sets duration ruTorrent plugin javascript cache is valid for in minutes
+                                                // Default is 3 hours which equals 3 hours * 60 minutes due to caching issues
+                                                // Optionally raise this value and clear web browser cache when upgrading versions
+
+        $miscCacheExpire = 3*60*24;             // Sets duration ruTorrent miscellaneous web browser cache is valid for in minutes
+                                                // The goal here to avoid keeping stale content in the web browser
+                                                // Default is 3 days which equals 3 days * 60 minutes * 24 hours
 
         $localhosts = array(                    // list of local interfaces
                 "127.0.0.1",
@@ -402,8 +412,6 @@ $ git clone git@github.com:Micdu70/geoip2-rutorrent.git geoip2
 ```bash
 $ cd /opt/share/www/rutorrent/plugins
 $ git clone git@github.com:phracker/ruTorrent-nfo.git nfo
-# Fix for ruTorrent v4.0+
-$ sed -i 's/cachedEcho/CachedEcho::send/' nfo/action.php
 ```
 
 !!! hint
