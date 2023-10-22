@@ -176,3 +176,13 @@ $ git fetch upstream
 $ git checkout master
 $ git merge upstream/master
 ```
+
+### Commit only part of a file's changes
+
+Use ```git add -e myfile``` to open the file in a text editor and choose which
+lines you'd like to stage and which you want to ignore.
+
+As you may known lines that start with + are addtions, lines that start with - are deletions. So:
+
+    To not stage an addition just delete that line.
+    To not stage a deletion just replace - with space

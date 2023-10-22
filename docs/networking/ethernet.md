@@ -84,3 +84,17 @@ No sheathing is used. Standard Cat5e cable are examples of U/UTP cables.
 <p style="font-size: 12px" align="right">
     <a href="https://planetechusa.com/demystifying-ethernet-types-difference-between-cat5e-cat-6-and-cat7/">Source</a>
 </p>
+
+## Power over Ethernet (PoE)
+
+|                           | PoE            | PoE+                | PoE++          | PoE++          |
+|---------------------------|----------------|---------------------|----------------|----------------|
+| IEEE-Standard             | 802.3af        | 802.3at             | 802.3bt        | 802.3bt        |
+| PoE Type                  | Type 1         | Type 2              | Type 3         | Type 4         |
+| Max. Power per Port       | 15,4 W         | 30 W                | 60 W           | 100 W          |
+| Voltage Range (at Switch) | 44–57V         | 50-57V              | 50-57V         | 52-57V         |
+| Max. Power to Device      | 12,95 W        | 25,5 W              | 51 W           | 71 W           |
+| Voltage Range to Device   | 37-57V         | 42,5–57V            | 42,5–57V       | 41,1-57V       |
+| Twisted Pairs Used        | 2-pair         | 2-pair              | 4-pair         | 4-pair         |
+| Supported cable           | Cat3 or better | Cat5 or better      | Cat5 or better | Cat5 or better |
+| Supported devices         | Access Points  | IP-Video telephones | Laptops        | TV sets        |
