@@ -86,7 +86,7 @@ schedule2 = low_diskspace, 15, 60, ((close_low_diskspace, 50G))
 schedule2 = session_save, 300, 300, ((session.save))
 
 ## Initialize ruTorrent plugins
-execute2 = {sh,-c,/opt/bin/php-cli /opt/share/www/rutorrent/php/initplugins.php &}
+execute2 = {sh,-c,/opt/bin/php-cli /opt/var/www/rutorrent/php/initplugins.php &}
 
 ## Logging:
 ## levels = critical error warn notice info debug
@@ -223,8 +223,8 @@ $ chmod +x /opt/etc/init.d/S85rtorrent
 ### Install and configure ruTorrent
 
 ```bash
-$ cd /opt/share/www/
-$ git clone https://github.com/Novik/ruTorrent.git rutorrent
+$ mkdir /opt/var/www
+$ git clone https://github.com/Novik/ruTorrent.git /opt/var/www/rutorrent
 ```
 
 #### Create ruTorrent 'user' config
@@ -232,7 +232,7 @@ $ git clone https://github.com/Novik/ruTorrent.git rutorrent
 We're not creating any ruTorrent users so we'll edit the default `config.php` file.
 
 ```bash
-$ nano /opt/share/www/rutorrent/conf/config.php
+$ nano /opt/var/www/rutorrent/conf/config.php
 ```
 
 Add the following:
@@ -261,7 +261,7 @@ Add the following:
         $rpcLogFaults = true;
 
         // for php
-        $phpUseGzip = true;
+        $phpUseGzip = false;
         $phpGzipLevel = 2;
 
         $schedule_rand = 10;                    // rand for schedulers start, +0..X seconds
@@ -280,15 +280,13 @@ Add the following:
         // $scgi_port = 5000;
         // $scgi_host = "127.0.0.1";
 
-        $scgi_port = 0;
-        $scgi_host = "unix:///opt/var/run/rtorrent.sock";
-
         // For web->rtorrent link through unix domain socket
         // (scgi_local in rtorrent conf file), change variables
         // above to something like this:
         //
-        // $scgi_port = 0;
-        // $scgi_host = "unix:///tmp/rpc.socket";
+
+        $scgi_port = 0;
+        $scgi_host = "unix:///opt/var/run/rtorrent.sock";
 
         $XMLRPCMountPoint = "/RPC2";            // DO NOT DELETE THIS LINE!!! DO NOT COMMENT THIS LINE!!!
 
@@ -306,14 +304,9 @@ Add the following:
         );
 
         $localHostedMode = true;                // Set to true if rTorrent is hosted on the SAME machine as ruTorrent
-        $cachedPluginLoading = true;            // Set to true to enable rapid cached loading of ruTorrent plugins
-        $pluginJSCacheExpire = 3*60;            // Sets duration ruTorrent plugin javascript cache is valid for in minutes
-                                                // Default is 3 hours which equals 3 hours * 60 minutes due to caching issues
-                                                // Optionally raise this value and clear web browser cache when upgrading versions
 
-        $miscCacheExpire = 3*60*24;             // Sets duration ruTorrent miscellaneous web browser cache is valid for in minutes
-                                                // The goal here to avoid keeping stale content in the web browser
-                                                // Default is 3 days which equals 3 days * 60 minutes * 24 hours
+        $cachedPluginLoading = true;            // Set to true to enable rapid cached loading of ruTorrent plugins
+                                                // Required to clear web browser cache when upgrading versions
 
         $localhosts = array(                    // list of local interfaces
                 "127.0.0.1",
@@ -340,7 +333,24 @@ Configure ruTorrent plugins follows:
 
 
 ```
-$ nano /opt/share/www/rutorrent/conf/plugins.ini
+$ nano /opt/var/www/rutorrent/conf/plugins.ini
+;; Plugins' permissions.
+;; If flag is not found in plugin section, corresponding flag from "default" section is used.
+;; If flag is not found in "default" section, it is assumed to be "yes".
+;;
+;; For setting individual plugin permissions you must write something like that:
+;;
+;; [ratio]
+;; enabled = yes                        ;; also may be "user-defined", in this case user can control plugin's state from UI
+;; canChangeToolbar = yes
+;; canChangeMenu = yes
+;; canChangeOptions = no
+;; canChangeTabs = yes
+;; canChangeColumns = yes
+;; canChangeStatusBar = yes
+;; canChangeCategory = yes
+;; canBeShutdowned = yes
+
 [default]
 enabled = user-defined
 canChangeToolbar = yes
@@ -380,7 +390,7 @@ enabled = no
 #### Configure `create` plugin
 
 ```bash
-$ nano /opt/share/www/rutorrent/plugins/create/conf.php
+$ nano /opt/var/www/rutorrent/plugins/create/conf.php
 $useExternal = 'mktorrent';
 $pathToCreatetorrent = '/opt/bin/mktorrent';
 ```
@@ -396,21 +406,21 @@ $ pip3 install cloudscraper
 #### Install `ratiocolor` plugin
 
 ```bash
-$ cd /opt/share/www/rutorrent/plugins
+$ cd /opt/var/www/rutorrent/plugins
 $ git clone git@github.com:Micdu70/rutorrent-ratiocolor.git ratiocolor
 ```
 
 #### Install `geoip2` plugin
 
 ```bash
-$ cd /opt/share/www/rutorrent/plugins
+$ cd /opt/var/www/rutorrent/plugins
 $ git clone git@github.com:Micdu70/geoip2-rutorrent.git geoip2
 ```
 
 #### Install `nfo` plugin
 
 ```bash
-$ cd /opt/share/www/rutorrent/plugins
+$ cd /opt/var/www/rutorrent/plugins
 $ git clone git@github.com:phracker/ruTorrent-nfo.git nfo
 ```
 
@@ -538,6 +548,12 @@ http {
 }
 ```
 
+Create the proper Nginx symlink
+
+```bash
+$ ln -s /opt/etc/nginx/sites-available/rutorrent.example.com.conf /opt/etc/nginx/sites-enabled/rutorrent.example.com.conf
+```
+
 #### Configure Nginx SCGI
 
 ```bash
@@ -563,6 +579,7 @@ scgi_param  SERVER_NAME        $server_name;
 #### Create Nginx vhost
 
 ```bash
+$ mkdir --parent /opt/etc/nginx/{sites-available,sites-enabled}
 $ nano /opt/etc/nginx/sites-available/rutorrent.example.com.conf
 server {
     listen 80;
@@ -581,9 +598,9 @@ server {
     access_log /opt/var/log/nginx/example.com/rutorrent/access.log;
     error_log /opt/var/log/nginx/example.com/rutorrent/error.log;
 
-    ssl_certificate /opt/etc/acme.sh/rutorrent.example.com/fullchain.cer;
-    ssl_certificate_key /opt/etc/acme.sh/rutorrent.example.com/rutorrent.example.com.key;
-    ssl_dhparam /opt/etc/acme.sh/rutorrent.example.com/dhparam.pem;
+    ssl_certificate /opt/etc/acme.sh/rutorrent.example.com_ecc/fullchain.cer;
+    ssl_certificate_key /opt/etc/acme.sh/rutorrent.example.com_ecc/rutorrent.example.com.key;
+    ssl_dhparam /opt/etc/acme.sh/rutorrent.example.com_ecc/dhparam.pem;
     ssl_session_timeout 5m;
     ssl_prefer_server_ciphers on;
     ssl_session_tickets off;
@@ -595,7 +612,7 @@ server {
 
     charset utf-8;
     index index.html index.php;
-    root /opt/share/www/rutorrent;
+    root /opt/var/www/rutorrent;
 
     client_max_body_size 64M;
 
@@ -657,6 +674,7 @@ Configure your DNS provider API keys:
 
 ```bash
 $ nano /opt/etc/acme.sh/dnsapi/dns_ovh.sh
+#!/opt/bin/bash
 #Application Key
 OVH_AK="foo"
 
@@ -665,6 +683,8 @@ OVH_AS="bar"
 
 #Consumer Key
 OVH_CK="foobar"
+
+OVH_END_POINT=ovh-eu
 ```
 
 Generate TLS certificate:
@@ -683,7 +703,7 @@ $ crontab -e
 Setup a Diffie-Helmann key as follows:
 
 ```bash
-$ wget https://ssl-config.mozilla.org/ffdhe4096.txt -O /opt/etc/acme.sh/rutorrent.homelab.lu/dhparam.pem
+$ wget https://ssl-config.mozilla.org/ffdhe4096.txt -O /opt/etc/acme.sh/rutorrent.example.com_ecc/dhparam.pem
 ```
 
 ### Restart services

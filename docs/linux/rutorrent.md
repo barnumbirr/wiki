@@ -30,6 +30,6 @@ Adding missing label icons is as easy as copying an existing icon to a different
 name:
 
 ```bash
-$ cp /opt/share/www/rutorrent/plugins/tracklabels/labels/movie.png /opt/share/www/rutorrent/plugins/tracklabels/labels/movies.png
-$ cp /opt/share/www/rutorrent/plugins/tracklabels/labels/books.png /opt/share/www/rutorrent/plugins/tracklabels/labels/ebooks.png
+$ cp /opt/var/www/rutorrent/plugins/tracklabels/labels/movie.png /opt/var/www/rutorrent/plugins/tracklabels/labels/movies.png
+$ cp /opt/var/www/rutorrent/plugins/tracklabels/labels/books.png /opt/var/www/rutorrent/plugins/tracklabels/labels/ebooks.png
 ```
