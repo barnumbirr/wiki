@@ -10,11 +10,11 @@ The Remarkable 2 or why you won't ever need paper notebooks again.
 
 ### Linux kernel
 
-Running [`Software release 2.15`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
+Running [`Software release 3.9`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
 
 ```bash
 $ uname -a
-Linux reMarkable 5.4.70-v1.2.5-rm11x #1 SMP PREEMPT Sun Oct 23 20:48:32 UTC 2022 armv7l GNU/Linux
+Linux reMarkable 5.4.70-v1.3.4-rm11x #1 SMP PREEMPT Wed Mar 15 06:06:44 UTC 2023 armv7l GNU/Linux
 ```
 
 ??? "Older versions"
@@ -74,44 +74,44 @@ March 2015](https://en.wikipedia.org/wiki/NXP_Semiconductors).
 
 ```bash
 $ cat /proc/meminfo
-MemTotal:        1027644 kB
-MemFree:          468364 kB
-MemAvailable:     851632 kB
-Buffers:           12468 kB
-Cached:           379288 kB
+MemTotal:         994900 kB
+MemFree:          356876 kB
+MemAvailable:     798216 kB
+Buffers:            8900 kB
+Cached:           460332 kB
 SwapCached:            0 kB
-Active:           182876 kB
-Inactive:         315920 kB
-Active(anon):     107316 kB
-Inactive(anon):     3540 kB
-Active(file):      75560 kB
-Inactive(file):   312380 kB
+Active:           175044 kB
+Inactive:         404864 kB
+Active(anon):     110920 kB
+Inactive(anon):    21156 kB
+Active(file):      64124 kB
+Inactive(file):   383708 kB
 Unevictable:           0 kB
 Mlocked:               0 kB
 SwapTotal:             0 kB
 SwapFree:              0 kB
 Dirty:                 0 kB
 Writeback:             0 kB
-AnonPages:        107036 kB
-Mapped:            53052 kB
-Shmem:              3820 kB
-KReclaimable:      11580 kB
-Slab:              20784 kB
-SReclaimable:      11580 kB
-SUnreclaim:         9204 kB
-KernelStack:         792 kB
-PageTables:         1372 kB
+AnonPages:        110672 kB
+Mapped:            64732 kB
+Shmem:             21404 kB
+KReclaimable:       8928 kB
+Slab:              18656 kB
+SReclaimable:       8928 kB
+SUnreclaim:         9728 kB
+KernelStack:         864 kB
+PageTables:         1340 kB
 NFS_Unstable:          0 kB
 Bounce:                0 kB
 WritebackTmp:          0 kB
-CommitLimit:      513820 kB
-Committed_AS:     307304 kB
+CommitLimit:      497448 kB
+Committed_AS:     353108 kB
 VmallocTotal:    1032192 kB
-VmallocUsed:         968 kB
+VmallocUsed:         844 kB
 VmallocChunk:          0 kB
 Percpu:              168 kB
 CmaTotal:         327680 kB
-CmaFree:          294640 kB
+CmaFree:          294544 kB
 ```
 
 ## Configuration
@@ -120,8 +120,8 @@ CmaFree:          294640 kB
 
 The default IP and SSH password of the Remarkable tablet can be found in the
 settings menu.  
-Navigate to it as follows: `Menu > Settings > Help > Copyrights and licenses > 
-General information > GPLv3 Compliance`.
+Navigate to it as follows: `Menu > Settings > General > Help > About >
+Copyrights and licenses > General information > GPLv3 Compliance`.
 
 The password is stored in `/etc/remarkable.conf`.
 
@@ -154,7 +154,14 @@ To see what timezones are available look at the contents of
 
 ### Additional functionality
 
+#### Software release 2.x
+
 [remarkable-hacks](https://github.com/ddvk/remarkable-hacks) adds a [literal
 metric ton of
 additional features](https://github.com/ddvk/remarkable-hacks#quick-doc) to the
 Remarkable. Follow the installation instructions in the project's README.
+
+#### Software release 3.x
+
+[rm-hacks](https://github.com/mb1986/rm-hacks) seems to be the spiritual
+successor to remarkable-hacks on software 3.x+.
