@@ -1,9 +1,9 @@
-site_name: wiki.martinsimon.me
-site_url: https://wiki.martinsimon.me
+site_name: wiki.simon.tf
+site_url: https://wiki.simon.tf
 repo_name: 'barnumbirr/wiki'
 repo_url: 'https://github.com/barnumbirr/wiki'
 copyright: |
-  Copyright &copy; 2021-2023 Martin Simon
+  Copyright &copy; 2021-2024 Martin Simon
 
 plugins:
   - search
@@ -49,5 +49,5 @@ theme:
 extra:
   analytics:
     provider: plausible
-    domain: wiki.martinsimon.me
+    domain: wiki.simon.tf
     script_url: https://plausible.io/js/plausible.outbound-links.js
