@@ -673,24 +673,25 @@ $ ./acme.sh --install --nocron --home /opt/etc/acme.sh --accountemail "user@exam
 Configure your DNS provider API keys:
 
 ```bash
-$ nano /opt/etc/acme.sh/dnsapi/dns_ovh.sh
+$ nano /opt/etc/acme.sh/dnsapi/dns_cf.sh
 #!/opt/bin/bash
-#Application Key
-OVH_AK="foo"
 
-#Application Secret
-OVH_AS="bar"
+#
+#CF_Key="sdfsdfsdfljlbjkljlkjsdfoiwje"
+#
+#CF_Email="xxxx@sss.com"
 
-#Consumer Key
-OVH_CK="foobar"
+CF_Token="foo"
+CF_Account_ID="bar"
+CF_Zone_ID="foobar"
 
-OVH_END_POINT=ovh-eu
+CF_Api="https://api.cloudflare.com/client/v4"
 ```
 
 Generate TLS certificate:
 
 ```bash
-$ /opt/etc/acme.sh/acme.sh --home /opt/etc/acme.sh --server letsencrypt --issue -d example.com --dns dns_ovh
+$ /opt/etc/acme.sh/acme.sh --home /opt/etc/acme.sh --server letsencrypt --issue -d example.com --dns dns_cf
 ```
 
 Setup a cronjob to automatically renew your certificate:

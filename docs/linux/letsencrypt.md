@@ -101,34 +101,29 @@ $ crontab -e
 Install `certbot`:
 ```bash
 $ apt-get update
-$ apt-get install certbot
+$ apt-get install certbot python3-certbot-nginx
 ```
-
-Install `acme-dns-certbot`:
+Install the necessary `certbot` DNS plugin, in this case for Cloudflare:
 ```bash
-$ wget https://github.com/joohoi/acme-dns-certbot-joohoi/raw/master/acme-dns-auth.py
-$ chmod +x acme-dns-auth.py
-$ nano acme-dns-auth.py
+$ apt-get install python3-certbot-dns-cloudflare
 ```
 
-Add a 3 to the end of the first line:
-
-```
-#!/usr/bin/env python3 #Add a 3 to the end of the first line
-```
-
+Create the necessary credentials file:
 ```bash
-$ mv acme-dns-auth.py /etc/letsencrypt/
+$ nano /etc/letsencrypt/cloudflare.ini
+dns_cloudflare_api_token = exampletoken
+$ chmod 600 /etc/letsencrypt/cloudflare.ini
 ```
 
 Request a certificate:
 ```bash
-$ certbot certonly --agree-tos --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --rsa-key-size 4096 --debug-challenges -d your_domain.tld -d your_domain2.tld -d your_domain3.tld
-```
-
-Add `CNAME` record to DNS zone:
-```bash
-_acme-challenge.your_domain.tld CNAME a15ce5b2-f170-4c91-97bf-09a5764a88f6.auth.acme-dns.io.
+$ certbot certonly \
+  --agree-tos \
+  --dns-cloudflare \
+  --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini \
+  --dns-cloudflare-propagation-seconds 10 \
+  --rsa-key-size 4096 \
+  -d your_domain.tld
 ```
 
 Generate a Diffie-Hellman key:
@@ -138,9 +133,9 @@ $ openssl dhparam -out /etc/letsencrypt/live/your_domain.tld/dhparam.pem 4096
 
 Add the following to the Nginx HTTPS vhost:
 ```bash
-    ssl_certificate /etc/letsencrypt/live/backup.homelab.lu/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/backup.homelab.lu/privkey.pem;
-    ssl_dhparam /etc/letsencrypt/live/backup.homelab.lu/dhparam.pem;
+    ssl_certificate /etc/letsencrypt/live/your_domain.tld/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your_domain.tld/privkey.pem;
+    ssl_dhparam /etc/letsencrypt/live/your_domain.tld/dhparam.pem;
     ssl_session_timeout 5m;
     ssl_prefer_server_ciphers on;
     ssl_session_tickets off;
