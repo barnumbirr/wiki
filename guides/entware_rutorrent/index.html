@@ -1,0 +1,2491 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://wiki.simon.tf/guides/entware_rutorrent/">
+      
+      
+        <link rel="prev" href="../../devops/puppet/">
+      
+      
+        <link rel="next" href="../../hardware/MIR3G/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>rTorrent/ruTorrent with Nginx & PHP-FPM on Entware - wiki.simon.tf</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  <script defer data-domain="wiki.simon.tf" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#install-required-base-packages" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="wiki.simon.tf" class="md-header__button md-logo" aria-label="wiki.simon.tf" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M96 0C43 0 0 43 0 96v320c0 53 43 96 96 96h320c17.7 0 32-14.3 32-32s-14.3-32-32-32v-64c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H96zm0 384h256v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            wiki.simon.tf
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              rTorrent/ruTorrent with Nginx & PHP-FPM on Entware
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/barnumbirr/wiki" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    barnumbirr/wiki
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="wiki.simon.tf" class="md-nav__button md-logo" aria-label="wiki.simon.tf" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M96 0C43 0 0 43 0 96v320c0 53 43 96 96 96h320c17.7 0 32-14.3 32-32s-14.3-32-32-32v-64c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H96zm0 384h256v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+
+    </a>
+    wiki.simon.tf
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/barnumbirr/wiki" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    barnumbirr/wiki
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Cars
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Cars
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cars/tyres/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tyres
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Devops
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Devops
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devops/cloudflare/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cloudflare
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devops/docker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devops/icinga/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Icinga
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devops/prometheus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prometheus
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devops/puppet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Puppet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    rTorrent/ruTorrent with Nginx & PHP-FPM on Entware
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    rTorrent/ruTorrent with Nginx & PHP-FPM on Entware
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-required-base-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install required base packages
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-rtorrent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure rTorrent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-and-configure-rutorrent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install and configure ruTorrent
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Install and configure ruTorrent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-rutorrent-user-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create ruTorrent 'user' config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-create-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure create plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-cloudscraper-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install cloudscraper plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-ratiocolor-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install ratiocolor plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-geoip2-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install geoip2 plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-nfo-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install nfo plugin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-phpphp-fpm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure PHP/PHP-FPM
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configure PHP/PHP-FPM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allow-php-fpm-to-run-as-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allow PHP-FPM to run as root
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure Nginx
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configure Nginx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-nginx-scgi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure Nginx SCGI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-nginx-vhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create Nginx vhost
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-tls-certificates-for-vhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generate TLS certificates for vhost
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restart-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restart services
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Hardware
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Hardware
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/MIR3G/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Xiaomi Mi WiFi R3G
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/RB4011/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mikrotik RB4011iGS+RM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/TS873A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    QNAP TS-873A
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/helios64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Helios64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/mn25/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    T-bao Tbook MN25
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/remarkable2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remarkable 2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Keyboards
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Keyboards
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../keyboards/lube/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lube
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Linux
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/apt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    apt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/bash/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    bash
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/entware/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Entware
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/fwupd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    fwupd
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/grub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GRUB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/letsencrypt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Let's Encrypt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/mdadm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    mdadm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/nginx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/opkg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    opkg
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/rutorrent/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ruTorrent
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/ssh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ssh
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/systemd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    systemd
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/wsl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Miscellaneous
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Miscellaneous
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../miscellaneous/vanced/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    YouTube Vanced
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Networking
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/ethernet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethernet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/ipv6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IPv6
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Programming
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Programming
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../programming/git/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-required-base-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install required base packages
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-rtorrent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure rTorrent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-and-configure-rutorrent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install and configure ruTorrent
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Install and configure ruTorrent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-rutorrent-user-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create ruTorrent 'user' config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-create-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure create plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-cloudscraper-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install cloudscraper plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-ratiocolor-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install ratiocolor plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-geoip2-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install geoip2 plugin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-nfo-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install nfo plugin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-phpphp-fpm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure PHP/PHP-FPM
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configure PHP/PHP-FPM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allow-php-fpm-to-run-as-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allow PHP-FPM to run as root
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure Nginx
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configure Nginx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-nginx-scgi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure Nginx SCGI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-nginx-vhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create Nginx vhost
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-tls-certificates-for-vhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generate TLS certificates for vhost
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restart-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restart services
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+    
+                  
+
+  
+  
+
+
+  <h1>rTorrent/ruTorrent with Nginx & PHP-FPM on Entware</h1>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some assumptions:<br />
+- SSH access to device<br />
+- Entware installed<br />
+- Neither rTorrent/ruTorrent, nor Nginx nor PHP-FPM previously installed  </p>
+</div>
+<h3 id="install-required-base-packages">Install required base packages</h3>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>opkg<span class="w"> </span>install<span class="w"> </span>bash<span class="w"> </span>curl<span class="w"> </span>ffmpeg<span class="w"> </span>git<span class="w"> </span>git-http<span class="w"> </span>gzip<span class="w"> </span>htop<span class="w"> </span>iotop<span class="w"> </span>mediainfo<span class="w"> </span>mktorrent<span class="se">\</span>
+nano<span class="w"> </span>nginx-ssl<span class="w"> </span>php8<span class="w"> </span>php8-cli<span class="w"> </span>php8-fpm<span class="w"> </span>php8-mod-bcmath<span class="w"> </span>php8-mod-ctype<span class="se">\</span>
+php8-mod-curl<span class="w"> </span>php8-mod-filter<span class="w"> </span>php8-mod-opcache<span class="w"> </span>php8-mod-phar<span class="w"> </span>php8-mod-session<span class="se">\</span>
+php8-mod-xml<span class="w"> </span>procps-ng-pgrep<span class="w"> </span>python3<span class="w"> </span>python3-pip<span class="w"> </span>rtorrent-rpc<span class="w"> </span>socat<span class="w"> </span>unrar<span class="se">\</span>
+unzip<span class="w"> </span>wget-ssl
+</code></pre></div>
+<h3 id="configure-rtorrent">Configure rTorrent</h3>
+<p>Create necessary directories:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>mkdir<span class="w"> </span>--parents<span class="w"> </span>/share/data/<span class="o">{</span>.rtorrent,torrents<span class="o">}</span>
+$<span class="w"> </span>mkdir<span class="w"> </span>/share/data/.rtorrent/<span class="o">{</span>.session,watch<span class="o">}</span>
+</code></pre></div>
+<p>Create rTorrent configuration file:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/share/data/.rtorrent/.rtorrent.rc
+<span class="c1">## Run rtorrent as a daemon (disables user interface, only XMLRPC control)</span>
+system.daemon.set<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span>
+
+<span class="c1">## Control rtorrent via UNIX XMLRPC socket</span>
+network.scgi.open_local<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>cat,<span class="w"> </span><span class="s2">&quot;/opt/var/run/rtorrent.sock&quot;</span><span class="o">)</span>
+execute.nothrow<span class="w"> </span><span class="o">=</span><span class="w"> </span>chmod,<span class="w"> </span><span class="m">770</span>,<span class="w"> </span><span class="o">(</span>cat,<span class="w"> </span><span class="s2">&quot;/opt/var/run/rtorrent.sock&quot;</span><span class="o">)</span>
+
+<span class="c1">## Listening port for incoming peer traffic, don&#39;t randomize</span>
+network.port_random.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>no
+network.port_range.set<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">49879</span>-49879
+
+<span class="c1">## Set default data save directory, session file path</span>
+directory.default.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>/share/data/torrents
+session.path.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>/share/data/.rtorrent/.session
+
+<span class="c1">## Disable UDP protocol to trackers, disable DHT/PEX BitTorrent protocols and enable traffic encryption if possible</span>
+trackers.use_udp.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>no
+dht.mode.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>off
+protocol.pex.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>no
+protocol.encryption.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>allow_incoming,<span class="w"> </span>try_outgoing,<span class="w"> </span>enable_retry
+
+<span class="c1">## Preferred filename encoding</span>
+encoding.add<span class="w"> </span><span class="o">=</span><span class="w"> </span>UTF-8
+
+<span class="c1">## Disable hash check on torrents that have finished downloading (intensive process)</span>
+pieces.hash.on_completion.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>no
+
+<span class="c1">## Minimum and maximum number of peers to connect to per torrent while downloading.</span>
+throttle.min_peers.normal.set<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">32</span>
+throttle.max_peers.normal.set<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">64</span>
+
+<span class="c1">## Minimum and maximum number of peers to connect to per torrent while seeding. (-1 for same value as above)</span>
+throttle.min_peers.seed.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>-1
+throttle.max_peers.seed.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>-1
+
+<span class="c1">## Maximum number of simultaneous downloads and uploads slots per torrent</span>
+throttle.max_downloads.set<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">32</span>
+throttle.max_uploads.set<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">32</span>
+
+<span class="c1">## Memory address space to map file chunks.</span>
+pieces.memory.max.set<span class="w"> </span><span class="o">=</span><span class="w"> </span>2048M
+
+<span class="c1">## Watch directory, saving a torrent file to this directory will automatically start the download.</span>
+<span class="nv">schedule2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>watch_directory,<span class="w"> </span><span class="m">5</span>,<span class="w"> </span><span class="m">5</span>,<span class="w"> </span>load.start<span class="o">=</span>/share/data/.rtorrent/watch/*.torrent
+<span class="nv">schedule2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>untied_directory,<span class="w"> </span><span class="m">5</span>,<span class="w"> </span><span class="m">5</span>,<span class="w"> </span><span class="nv">stop_untied</span><span class="o">=</span>/share/data/.rtorrent/watch/*.torrent
+
+<span class="c1">## Stop rtorrent from downloading data when disk space is low.</span>
+<span class="nv">schedule2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>low_diskspace,<span class="w"> </span><span class="m">15</span>,<span class="w"> </span><span class="m">60</span>,<span class="w"> </span><span class="o">((</span>close_low_diskspace,<span class="w"> </span>50G<span class="o">))</span>
+
+<span class="c1">## Save rtorrent session data every 5 minutes (default: 20min)</span>
+<span class="nv">schedule2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>session_save,<span class="w"> </span><span class="m">300</span>,<span class="w"> </span><span class="m">300</span>,<span class="w"> </span><span class="o">((</span>session.save<span class="o">))</span>
+
+<span class="c1">## Initialize ruTorrent plugins</span>
+<span class="nv">execute2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>sh,-c,/opt/bin/php-cli<span class="w"> </span>/opt/var/www/rutorrent/php/initplugins.php<span class="w"> </span><span class="p">&amp;</span><span class="o">}</span>
+
+<span class="c1">## Logging:</span>
+<span class="c1">## levels = critical error warn notice info debug</span>
+<span class="c1">## groups = connection_* dht_* peer_* rpc_* storage_* thread_* tracker_* torrent_</span>
+<span class="c1"># Log info</span>
+<span class="c1"># log.open_file = &quot;logfile&quot;, (cat,/opt/var/log/rtorrent.log)</span>
+<span class="c1"># log.add_output = &quot;debug&quot;, &quot;logfile&quot;</span>
+<span class="c1"># log.add_output = &quot;tracker_debug&quot;, &quot;logfile&quot;</span>
+</code></pre></div>
+<p>Create rTorrent init file:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This init file is heavily inspired by Entware's
+<code>/opt/etc/init.d/rc.func</code>.</p>
+</div>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/init.d/S85rtorrent
+<span class="c1">#!/bin/sh</span>
+
+<span class="nv">PROCS</span><span class="o">=</span>rtorrent
+<span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;-D -n -o import=/share/data/.rtorrent/.rtorrent.rc&quot;</span>
+<span class="nv">DESC</span><span class="o">=</span><span class="nv">$PROCS</span>
+<span class="nv">PATH</span><span class="o">=</span>/opt/sbin:/opt/bin:/opt/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+<span class="nv">ansi_red</span><span class="o">=</span><span class="s2">&quot;\033[1;31m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_white</span><span class="o">=</span><span class="s2">&quot;\033[1;37m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_green</span><span class="o">=</span><span class="s2">&quot;\033[1;32m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_yellow</span><span class="o">=</span><span class="s2">&quot;\033[1;33m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_blue</span><span class="o">=</span><span class="s2">&quot;\033[1;34m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_bell</span><span class="o">=</span><span class="s2">&quot;\007&quot;</span><span class="p">;</span>
+<span class="nv">ansi_blink</span><span class="o">=</span><span class="s2">&quot;\033[5m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_std</span><span class="o">=</span><span class="s2">&quot;\033[m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_rev</span><span class="o">=</span><span class="s2">&quot;\033[7m&quot;</span><span class="p">;</span>
+<span class="nv">ansi_ul</span><span class="o">=</span><span class="s2">&quot;\033[4m&quot;</span><span class="p">;</span>
+
+<span class="nv">ACTION</span><span class="o">=</span><span class="nv">$1</span>
+
+start<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ansi_white</span><span class="s2"> Starting </span><span class="nv">$DESC</span><span class="s2">... </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;            </span><span class="nv">$ansi_yellow</span><span class="s2"> already running. </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">0</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span><span class="nv">$PROC</span><span class="w"> </span><span class="nv">$ARGS</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">    </span><span class="nv">COUNTER</span><span class="o">=</span><span class="m">0</span>
+<span class="w">    </span><span class="nv">LIMIT</span><span class="o">=</span><span class="m">10</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$COUNTER</span><span class="s2">&quot;</span><span class="w"> </span>-le<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LIMIT</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span>sleep<span class="w"> </span><span class="m">1</span><span class="p">;</span>
+<span class="w">        </span><span class="nv">COUNTER</span><span class="o">=</span><span class="k">$((</span><span class="nv">COUNTER</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
+<span class="w">    </span><span class="k">done</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;            </span><span class="nv">$ansi_red</span><span class="s2"> failed. </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">        </span>logger<span class="w"> </span><span class="s2">&quot;Failed to start </span><span class="nv">$DESC</span><span class="s2"> from </span><span class="nv">$CALLER</span><span class="s2">.&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">255</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;            </span><span class="nv">$ansi_green</span><span class="s2"> done. </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">        </span>logger<span class="w"> </span><span class="s2">&quot;Started </span><span class="nv">$DESC</span><span class="s2"> from </span><span class="nv">$CALLER</span><span class="s2">.&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">0</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="o">}</span>
+
+stop<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ACTION</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">        </span>stop<span class="w"> </span><span class="p">|</span><span class="w"> </span>restart<span class="o">)</span>
+<span class="w">            </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ansi_white</span><span class="s2"> Shutting down </span><span class="nv">$PROC</span><span class="s2">... </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">            </span><span class="nb">kill</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<span class="w">            </span><span class="nv">COUNTER</span><span class="o">=</span><span class="m">0</span>
+<span class="w">            </span><span class="nv">LIMIT</span><span class="o">=</span><span class="m">10</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$COUNTER</span><span class="s2">&quot;</span><span class="w"> </span>-le<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LIMIT</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">                </span>sleep<span class="w"> </span><span class="m">1</span><span class="p">;</span>
+<span class="w">                </span><span class="nv">COUNTER</span><span class="o">=</span><span class="k">$((</span><span class="nv">COUNTER</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
+<span class="w">            </span><span class="k">done</span>
+<span class="w">            </span>rm<span class="w"> </span>/opt/var/run/rtorrent.sock
+<span class="w">            </span><span class="p">;;</span>
+<span class="w">        </span><span class="nb">kill</span><span class="o">)</span>
+<span class="w">            </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ansi_white</span><span class="s2"> Killing </span><span class="nv">$PROC</span><span class="s2">... </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">            </span><span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<span class="w">            </span>rm<span class="w"> </span>/opt/var/run/rtorrent.sock
+<span class="w">            </span><span class="p">;;</span>
+<span class="w">    </span><span class="k">esac</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;       </span><span class="nv">$ansi_red</span><span class="s2"> failed. </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">255</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;       </span><span class="nv">$ansi_green</span><span class="s2"> done. </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">0</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="o">}</span>
+
+check<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ansi_white</span><span class="s2"> Checking </span><span class="nv">$DESC</span><span class="s2">... &quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>pgrep<span class="w"> </span>-x<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROC</span><span class="s2"> </span><span class="nv">$ARGS</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;            </span><span class="nv">$ansi_green</span><span class="s2"> alive. </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">0</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;            </span><span class="nv">$ansi_red</span><span class="s2"> dead. </span><span class="nv">$ansi_std</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">for</span><span class="w"> </span>PROC<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nv">$PROCS</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nv">$ACTION</span><span class="w"> </span><span class="k">in</span>
+<span class="w">        </span>start<span class="o">)</span>
+<span class="w">            </span>start
+<span class="w">            </span><span class="p">;;</span>
+<span class="w">        </span>stop<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nb">kill</span><span class="w"> </span><span class="o">)</span>
+<span class="w">            </span>check<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>stop
+<span class="w">            </span><span class="p">;;</span>
+<span class="w">        </span>restart<span class="o">)</span>
+<span class="w">            </span>check<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>stop
+<span class="w">            </span>start
+<span class="w">            </span><span class="p">;;</span>
+<span class="w">        </span>check<span class="o">)</span>
+<span class="w">            </span>check
+<span class="w">            </span><span class="p">;;</span>
+<span class="w">        </span>*<span class="o">)</span>
+<span class="w">            </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ansi_white</span><span class="s2"> Usage: </span><span class="nv">$0</span><span class="s2"> (start|stop|restart|check)</span><span class="nv">$ansi_std</span><span class="s2">&quot;</span>
+<span class="w">            </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">            </span><span class="p">;;</span>
+<span class="w">    </span><span class="k">esac</span>
+<span class="k">done</span>
+</code></pre></div>
+<p>Then run:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/opt/etc/init.d/S85rtorrent
+</code></pre></div>
+<h3 id="install-and-configure-rutorrent">Install and configure ruTorrent</h3>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>mkdir<span class="w"> </span>/opt/var/www
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Novik/ruTorrent.git<span class="w"> </span>/opt/var/www/rutorrent
+</code></pre></div>
+<h4 id="create-rutorrent-user-config">Create ruTorrent 'user' config</h4>
+<p>We're not creating any ruTorrent users so we'll edit the default <code>config.php</code> file.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/var/www/rutorrent/conf/config.php
+</code></pre></div>
+<p>Add the following:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+        <span class="c1">// configuration parameters</span>
+
+        <span class="c1">// for snoopy client</span>
+        <span class="nv">$httpUserAgent</span> <span class="o">=</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36&#39;</span><span class="p">;</span>
+        <span class="nv">$httpTimeOut</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>                      <span class="c1">// in seconds</span>
+        <span class="nv">$httpUseGzip</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="nv">$httpIP</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>                         <span class="c1">// IP string. Or null for any.</span>
+        <span class="nv">$httpProxy</span> <span class="o">=</span> <span class="k">array</span>
+        <span class="p">(</span>
+                <span class="s1">&#39;use&#39;</span>   <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
+                <span class="s1">&#39;proto&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;http&#39;</span><span class="p">,</span>              <span class="c1">// &#39;http&#39; or &#39;https&#39;</span>
+                <span class="s1">&#39;host&#39;</span>  <span class="o">=&gt;</span> <span class="s1">&#39;PROXY_HOST_HERE&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;port&#39;</span>  <span class="o">=&gt;</span> <span class="mi">3128</span>
+        <span class="p">);</span>
+
+        <span class="c1">// for xmlrpc actions</span>
+        <span class="nv">$rpcTimeOut</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>                        <span class="c1">// in seconds</span>
+        <span class="nv">$rpcLogCalls</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="nv">$rpcLogFaults</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+
+        <span class="c1">// for php</span>
+        <span class="nv">$phpUseGzip</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="nv">$phpGzipLevel</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+        <span class="nv">$schedule_rand</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>                    <span class="c1">// rand for schedulers start, +0..X seconds</span>
+
+        <span class="nv">$do_diagnostic</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>                  <span class="c1">// Diagnose ruTorrent. Recommended to keep enabled, unless otherwise required.</span>
+        <span class="nv">$al_diagnostic</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>                  <span class="c1">// Diagnose auto-loader. Set to &quot;false&quot; to make composer plugins work.</span>
+
+        <span class="nv">$log_file</span> <span class="o">=</span> <span class="s1">&#39;/opt/var/log/rutorrent/errors.log&#39;</span><span class="p">;</span>                <span class="c1">// path to log file (comment or leave blank to disable logging)</span>
+
+        <span class="nv">$saveUploadedTorrents</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>           <span class="c1">// Save uploaded torrents to profile/torrents directory or not</span>
+        <span class="nv">$overwriteUploadedTorrents</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>     <span class="c1">// Overwrite existing uploaded torrents in profile/torrents directory or make unique name</span>
+
+        <span class="nv">$topDirectory</span> <span class="o">=</span> <span class="s1">&#39;/share/data/torrents/&#39;</span><span class="p">;</span>                        <span class="c1">// Upper available directory. Absolute path with trail slash.</span>
+        <span class="nv">$forbidUserSettings</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+
+        <span class="c1">// $scgi_port = 5000;</span>
+        <span class="c1">// $scgi_host = &quot;127.0.0.1&quot;;</span>
+
+        <span class="c1">// For web-&gt;rtorrent link through unix domain socket</span>
+        <span class="c1">// (scgi_local in rtorrent conf file), change variables</span>
+        <span class="c1">// above to something like this:</span>
+        <span class="c1">//</span>
+
+        <span class="nv">$scgi_port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="nv">$scgi_host</span> <span class="o">=</span> <span class="s2">&quot;unix:///opt/var/run/rtorrent.sock&quot;</span><span class="p">;</span>
+
+        <span class="nv">$XMLRPCMountPoint</span> <span class="o">=</span> <span class="s2">&quot;/RPC2&quot;</span><span class="p">;</span>            <span class="c1">// DO NOT DELETE THIS LINE!!! DO NOT COMMENT THIS LINE!!!</span>
+
+        <span class="nv">$throttleMaxSpeed</span> <span class="o">=</span> <span class="mi">327625</span><span class="o">*</span><span class="mi">1024</span><span class="p">;</span>        <span class="c1">// DO NOT EDIT THIS LINE!!! DO NOT COMMENT THIS LINE!!!</span>
+        <span class="c1">// Can&#39;t be greater then 327625*1024 due to limitation in libtorrent ResourceManager::set_max_upload_unchoked function.</span>
+
+        <span class="nv">$pathToExternals</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s2">&quot;curl&quot;</span>   <span class="o">=&gt;</span> <span class="s1">&#39;/opt/bin/curl&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;gzip&quot;</span>   <span class="o">=&gt;</span> <span class="s1">&#39;/opt/bin/gzip&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span>     <span class="o">=&gt;</span> <span class="s1">&#39;/usr/bin/id&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;php&quot;</span>    <span class="o">=&gt;</span> <span class="s1">&#39;/opt/bin/php-cli&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;pgrep&quot;</span>  <span class="o">=&gt;</span> <span class="s1">&#39;/opt/bin/pgrep&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;python&quot;</span> <span class="o">=&gt;</span> <span class="s1">&#39;/opt/bin/python3&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;stat&quot;</span>   <span class="o">=&gt;</span> <span class="s1">&#39;/opt/bin/stat&#39;</span>
+        <span class="p">);</span>
+
+        <span class="nv">$localHostedMode</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>                <span class="c1">// Set to true if rTorrent is hosted on the SAME machine as ruTorrent</span>
+
+        <span class="nv">$cachedPluginLoading</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>            <span class="c1">// Set to true to enable rapid cached loading of ruTorrent plugins</span>
+                                                <span class="c1">// Required to clear web browser cache when upgrading versions</span>
+
+        <span class="nv">$localhosts</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>                    <span class="c1">// list of local interfaces</span>
+                <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+        <span class="p">);</span>
+
+        <span class="nv">$profilePath</span> <span class="o">=</span> <span class="s1">&#39;../../share&#39;</span><span class="p">;</span>           <span class="c1">// Path to user profiles</span>
+        <span class="nv">$profileMask</span> <span class="o">=</span> <span class="mo">0777</span><span class="p">;</span>                    <span class="c1">// Mask for files and directory creation in user profiles.</span>
+                                                <span class="c1">// Both Webserver and rtorrent users must have read-write access to it.</span>
+                                                <span class="c1">// For example, if Webserver and rtorrent users are in the same group then the value may be 0770.</span>
+
+        <span class="nv">$tempDirectory</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>                  <span class="c1">// Temp directory. Absolute path with trail slash. If null, then autodetect will be used.</span>
+
+        <span class="nv">$canUseXSendFile</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>               <span class="c1">// If true then use X-Sendfile feature if it exist</span>
+
+        <span class="nv">$locale</span> <span class="o">=</span> <span class="s2">&quot;UTF8&quot;</span><span class="p">;</span>
+
+        <span class="nv">$enableCSRFCheck</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>               <span class="c1">// If true then Origin and Referer will be checked</span>
+        <span class="nv">$enabledOrigins</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>              <span class="c1">// List of enabled domains for CSRF check (only hostnames, without protocols, port etc.).</span>
+                                                <span class="c1">// If empty, then will retrieve domain from HTTP_HOST / HTTP_X_FORWARDED_HOST</span>
+</code></pre></div>
+<p>Configure ruTorrent plugins follows:</p>
+<div class="highlight"><pre><span></span><code>$ nano /opt/var/www/rutorrent/conf/plugins.ini
+;; Plugins&#39; permissions.
+;; If flag is not found in plugin section, corresponding flag from &quot;default&quot; section is used.
+;; If flag is not found in &quot;default&quot; section, it is assumed to be &quot;yes&quot;.
+;;
+;; For setting individual plugin permissions you must write something like that:
+;;
+;; [ratio]
+;; enabled = yes                        ;; also may be &quot;user-defined&quot;, in this case user can control plugin&#39;s state from UI
+;; canChangeToolbar = yes
+;; canChangeMenu = yes
+;; canChangeOptions = no
+;; canChangeTabs = yes
+;; canChangeColumns = yes
+;; canChangeStatusBar = yes
+;; canChangeCategory = yes
+;; canBeShutdowned = yes
+
+[default]
+enabled = user-defined
+canChangeToolbar = yes
+canChangeMenu = yes
+canChangeOptions = yes
+canChangeTabs = yes
+canChangeColumns = yes
+canChangeStatusBar = yes
+canChangeCategory = yes
+canBeShutdowned = yes
+
+[ipad]
+enabled = no
+
+[httprpc]
+enabled = no
+
+[retrackers]
+enabled = no
+
+[rpc]
+enabled = no
+
+[rutracker_check]
+enabled = no
+
+[geoip]
+enabled = no
+
+[geoip2]
+enabled = yes
+
+[spectrogram]
+enabled = no
+</code></pre></div>
+<h4 id="configure-create-plugin">Configure <code>create</code> plugin</h4>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/var/www/rutorrent/plugins/create/conf.php
+<span class="nv">$useExternal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;mktorrent&#39;</span><span class="p">;</span>
+<span class="nv">$pathToCreatetorrent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/opt/bin/mktorrent&#39;</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="install-cloudscraper-plugin">Install <code>cloudscraper</code> plugin</h4>
+<p><code>cloudscraper</code> is a dependency of the <code>_cloudflare</code> plugin.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>cloudscraper
+</code></pre></div>
+<h4 id="install-ratiocolor-plugin">Install <code>ratiocolor</code> plugin</h4>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/opt/var/www/rutorrent/plugins
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:Micdu70/rutorrent-ratiocolor.git<span class="w"> </span>ratiocolor
+</code></pre></div>
+<h4 id="install-geoip2-plugin">Install <code>geoip2</code> plugin</h4>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/opt/var/www/rutorrent/plugins
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:Micdu70/geoip2-rutorrent.git<span class="w"> </span>geoip2
+</code></pre></div>
+<h4 id="install-nfo-plugin">Install <code>nfo</code> plugin</h4>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/opt/var/www/rutorrent/plugins
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:phracker/ruTorrent-nfo.git<span class="w"> </span>nfo
+</code></pre></div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You might need to "fix" <code>tracklabels</code> missing icons
+<a href="../../linux/rutorrent/#fix_missing_label_icons">as described here</a>.</p>
+</div>
+<h3 id="configure-phpphp-fpm">Configure PHP/PHP-FPM</h3>
+<p>For PHP:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/php.ini
+<span class="nv">memory_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>128M
+<span class="p">;</span><span class="nv">doc_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/opt/share/www&quot;</span>
+<span class="nv">upload_max_filesize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>64M
+<span class="nv">max_file_uploads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">64</span>
+date.timezone<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Europe/Luxembourg&quot;</span>
+<span class="nv">sys_temp_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/opt/tmp&quot;</span>
+</code></pre></div>
+<p>For PHP-FPM:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/php8-fpm.d/www.conf
+<span class="nv">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>admin
+env<span class="o">[</span>PATH<span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>/opt/bin:/opt/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin
+</code></pre></div>
+<h4 id="allow-php-fpm-to-run-as-root">Allow PHP-FPM to run as root</h4>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/init.d/S79php8-fpm
+<span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--daemonize -R --fpm-config /opt/etc/php8-fpm.conf&quot;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You'll need to edit the init file to allow <code>php-fpm</code> to run as root each
+time the package is updated.</p>
+</div>
+<h3 id="configure-nginx">Configure Nginx</h3>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/nginx/nginx.conf
+user<span class="w"> </span>admin<span class="w"> </span>administrators<span class="p">;</span>
+worker_processes<span class="w"> </span>auto<span class="p">;</span>
+pid<span class="w"> </span>/opt/var/run/nginx.pid<span class="p">;</span>
+include<span class="w"> </span>/opt/etc/nginx/modules-enabled/*.conf<span class="p">;</span>
+
+events<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>worker_connections<span class="w"> </span><span class="m">1024</span><span class="p">;</span>
+<span class="w">    </span>use<span class="w"> </span>epoll<span class="p">;</span>
+<span class="w">    </span><span class="c1"># multi_accept on;</span>
+<span class="o">}</span>
+
+http<span class="w"> </span><span class="o">{</span>
+
+<span class="w">    </span><span class="c1">##</span>
+<span class="w">    </span><span class="c1"># Basic Settings</span>
+<span class="w">    </span><span class="c1">##</span>
+
+<span class="w">    </span>sendfile<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>tcp_nopush<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>tcp_nodelay<span class="w"> </span>off<span class="p">;</span>
+<span class="w">    </span>keepalive_timeout<span class="w"> </span><span class="m">65</span><span class="p">;</span>
+<span class="w">    </span>keepalive_requests<span class="w"> </span><span class="m">100</span><span class="p">;</span>
+<span class="w">    </span>keepalive_disable<span class="w"> </span>msie6<span class="p">;</span>
+<span class="w">    </span>types_hash_max_size<span class="w"> </span><span class="m">2048</span><span class="p">;</span>
+<span class="w">    </span>server_tokens<span class="w"> </span>off<span class="p">;</span>
+
+<span class="w">    </span><span class="c1"># server_names_hash_bucket_size 64;</span>
+<span class="w">    </span><span class="c1"># server_name_in_redirect off;</span>
+
+<span class="w">    </span>include<span class="w"> </span>/opt/etc/nginx/mime.types<span class="p">;</span>
+<span class="w">    </span>default_type<span class="w"> </span>application/octet-stream<span class="p">;</span>
+
+<span class="w">    </span><span class="c1">##</span>
+<span class="w">    </span><span class="c1"># SSL Settings</span>
+<span class="w">    </span><span class="c1">##</span>
+
+<span class="w">    </span>ssl_protocols<span class="w"> </span>TLSv1<span class="w"> </span>TLSv1.1<span class="w"> </span>TLSv1.2<span class="p">;</span><span class="w"> </span><span class="c1"># Dropping SSLv3, ref: POODLE</span>
+<span class="w">    </span>ssl_prefer_server_ciphers<span class="w"> </span>on<span class="p">;</span>
+
+<span class="w">    </span><span class="c1">##</span>
+<span class="w">    </span><span class="c1"># Logging Settings</span>
+<span class="w">    </span><span class="c1">##</span>
+
+<span class="w">    </span>access_log<span class="w"> </span>/opt/var/log/nginx/access.log<span class="p">;</span>
+<span class="w">    </span>error_log<span class="w"> </span>/opt/var/log/nginx/error.log<span class="p">;</span>
+
+<span class="w">    </span><span class="c1">##</span>
+<span class="w">    </span><span class="c1"># Gzip Settings</span>
+<span class="w">    </span><span class="c1">##</span>
+
+<span class="w">    </span>gzip<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>gzip_disable<span class="w"> </span><span class="s2">&quot;msie6&quot;</span><span class="p">;</span>
+<span class="w">    </span>gzip_min_length<span class="w"> </span><span class="m">512</span><span class="p">;</span>
+<span class="w">    </span>gzip_vary<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>gzip_proxied<span class="w"> </span>any<span class="p">;</span>
+<span class="w">    </span>gzip_comp_level<span class="w"> </span><span class="m">6</span><span class="p">;</span>
+<span class="w">    </span>gzip_buffers<span class="w"> </span><span class="m">16</span><span class="w"> </span>8k<span class="p">;</span>
+<span class="w">    </span>gzip_types
+<span class="w">        </span>text/css
+<span class="w">        </span>text/javascript
+<span class="w">        </span>text/xml
+<span class="w">        </span>text/plain
+<span class="w">        </span>text/x-component
+<span class="w">        </span>application/javascript
+<span class="w">        </span>application/x-javascript
+<span class="w">        </span>application/json
+<span class="w">        </span>application/xml
+<span class="w">        </span>application/rss+xml
+<span class="w">        </span>application/vnd.ms-fontobject
+<span class="w">        </span>font/truetype
+<span class="w">        </span>font/opentype
+<span class="w">        </span>image/svg+xml<span class="p">;</span>
+
+<span class="w">    </span><span class="c1">##</span>
+<span class="w">    </span><span class="c1"># Virtual Host Configs</span>
+<span class="w">    </span><span class="c1">##</span>
+
+<span class="w">    </span>include<span class="w"> </span>/opt/etc/nginx/conf.d/*.conf<span class="p">;</span>
+<span class="w">    </span>include<span class="w"> </span>/opt/etc/nginx/sites-enabled/*<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Create the proper Nginx symlink</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/opt/etc/nginx/sites-available/rutorrent.example.com.conf<span class="w"> </span>/opt/etc/nginx/sites-enabled/rutorrent.example.com.conf
+</code></pre></div>
+<h4 id="configure-nginx-scgi">Configure Nginx SCGI</h4>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/nginx/scgi_params
+scgi_param<span class="w">  </span>REQUEST_METHOD<span class="w">     </span><span class="nv">$request_method</span><span class="p">;</span>
+scgi_param<span class="w">  </span>REQUEST_URI<span class="w">        </span><span class="nv">$request_uri</span><span class="p">;</span>
+scgi_param<span class="w">  </span>QUERY_STRING<span class="w">       </span><span class="nv">$query_string</span><span class="p">;</span>
+scgi_param<span class="w">  </span>CONTENT_TYPE<span class="w">       </span><span class="nv">$content_type</span><span class="p">;</span>
+
+scgi_param<span class="w">  </span>DOCUMENT_URI<span class="w">       </span><span class="nv">$document_uri</span><span class="p">;</span>
+scgi_param<span class="w">  </span>DOCUMENT_ROOT<span class="w">      </span><span class="nv">$document_root</span><span class="p">;</span>
+scgi_param<span class="w">  </span>SCGI<span class="w">               </span><span class="m">1</span><span class="p">;</span>
+scgi_param<span class="w">  </span>SERVER_PROTOCOL<span class="w">    </span><span class="nv">$server_protocol</span><span class="p">;</span>
+scgi_param<span class="w">  </span>REQUEST_SCHEME<span class="w">     </span><span class="nv">$scheme</span><span class="p">;</span>
+scgi_param<span class="w">  </span>HTTPS<span class="w">              </span><span class="nv">$https</span><span class="w"> </span>if_not_empty<span class="p">;</span>
+
+scgi_param<span class="w">  </span>REMOTE_ADDR<span class="w">        </span><span class="nv">$remote_addr</span><span class="p">;</span>
+scgi_param<span class="w">  </span>REMOTE_PORT<span class="w">        </span><span class="nv">$remote_port</span><span class="p">;</span>
+scgi_param<span class="w">  </span>SERVER_PORT<span class="w">        </span><span class="nv">$server_port</span><span class="p">;</span>
+scgi_param<span class="w">  </span>SERVER_NAME<span class="w">        </span><span class="nv">$server_name</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="create-nginx-vhost">Create Nginx vhost</h4>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>mkdir<span class="w"> </span>--parent<span class="w"> </span>/opt/etc/nginx/<span class="o">{</span>sites-available,sites-enabled<span class="o">}</span>
+$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/nginx/sites-available/rutorrent.example.com.conf
+server<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>listen<span class="w"> </span><span class="m">80</span><span class="p">;</span>
+<span class="w">    </span>server_name<span class="w"> </span>rutorrent.example.com<span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">301</span><span class="w"> </span>https://<span class="nv">$server_name$request_uri</span><span class="p">;</span>
+
+<span class="w">    </span>access_log<span class="w"> </span>/opt/var/log/nginx/example.com/rutorrent/access.log<span class="p">;</span>
+<span class="w">    </span>error_log<span class="w"> </span>/opt/var/log/nginx/example.com/rutorrent/error.log<span class="p">;</span>
+<span class="o">}</span>
+
+server<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>listen<span class="w"> </span><span class="m">443</span><span class="w"> </span>ssl<span class="p">;</span>
+<span class="w">    </span>http2<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>server_name<span class="w"> </span>rutorrent.example.com<span class="p">;</span>
+
+<span class="w">    </span>access_log<span class="w"> </span>/opt/var/log/nginx/example.com/rutorrent/access.log<span class="p">;</span>
+<span class="w">    </span>error_log<span class="w"> </span>/opt/var/log/nginx/example.com/rutorrent/error.log<span class="p">;</span>
+
+<span class="w">    </span>ssl_certificate<span class="w"> </span>/opt/etc/acme.sh/rutorrent.example.com_ecc/fullchain.cer<span class="p">;</span>
+<span class="w">    </span>ssl_certificate_key<span class="w"> </span>/opt/etc/acme.sh/rutorrent.example.com_ecc/rutorrent.example.com.key<span class="p">;</span>
+<span class="w">    </span>ssl_dhparam<span class="w"> </span>/opt/etc/acme.sh/rutorrent.example.com_ecc/dhparam.pem<span class="p">;</span>
+<span class="w">    </span>ssl_session_timeout<span class="w"> </span>5m<span class="p">;</span>
+<span class="w">    </span>ssl_prefer_server_ciphers<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>ssl_session_tickets<span class="w"> </span>off<span class="p">;</span>
+<span class="w">    </span>ssl_stapling<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>ssl_stapling_verify<span class="w"> </span>on<span class="p">;</span>
+<span class="w">    </span>ssl_protocols<span class="w"> </span>TLSv1.2<span class="w"> </span>TLSv1.3<span class="p">;</span>
+<span class="w">    </span>ssl_ciphers<span class="w"> </span>ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384<span class="p">;</span>
+<span class="w">    </span>add_header<span class="w"> </span>Strict-Transport-Security<span class="w"> </span><span class="s2">&quot;max-age=15768000&quot;</span><span class="w"> </span>always<span class="p">;</span><span class="w"> </span><span class="c1"># six month</span>
+
+<span class="w">    </span>charset<span class="w"> </span>utf-8<span class="p">;</span>
+<span class="w">    </span>index<span class="w"> </span>index.html<span class="w"> </span>index.php<span class="p">;</span>
+<span class="w">    </span>root<span class="w"> </span>/opt/var/www/rutorrent<span class="p">;</span>
+
+<span class="w">    </span>client_max_body_size<span class="w"> </span>64M<span class="p">;</span>
+
+<span class="w">    </span>error_page<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="m">502</span><span class="w"> </span><span class="m">503</span><span class="w"> </span><span class="m">504</span><span class="w"> </span>/50x.html<span class="p">;</span>
+
+<span class="w">    </span>location<span class="w"> </span>/RPC2<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>include<span class="w"> </span>scgi_params<span class="p">;</span>
+<span class="w">        </span>scgi_pass<span class="w"> </span>unix:/opt/var/run/rtorrent.sock<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span><span class="nv">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>/50x.html<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>root<span class="w"> </span>/opt/share/nginx/html<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span><span class="nv">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>/favicon.ico<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>access_log<span class="w"> </span>off<span class="p">;</span>
+<span class="w">        </span>log_not_found<span class="w"> </span>off<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span>location<span class="w"> </span>~<span class="w"> </span>^/<span class="o">(</span>conf<span class="p">|</span>share<span class="o">)</span>/<span class="o">(</span>.+<span class="o">)</span>$<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>deny<span class="w"> </span>all<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span>location<span class="w"> </span>~<span class="w"> </span><span class="se">\.</span>php$<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>try_files<span class="w"> </span><span class="nv">$uri</span><span class="w"> </span><span class="o">=</span><span class="m">404</span><span class="p">;</span>
+<span class="w">        </span>fastcgi_split_path_info<span class="w"> </span>^<span class="o">(</span>.+<span class="se">\.</span>php<span class="o">)(</span>/.*<span class="o">)</span>$<span class="p">;</span>
+<span class="w">        </span>include<span class="w"> </span>fastcgi_params<span class="p">;</span>
+<span class="w">        </span>fastcgi_index<span class="w">  </span>index.php<span class="p">;</span>
+<span class="w">        </span>fastcgi_param<span class="w"> </span>SCRIPT_FILENAME<span class="w"> </span><span class="nv">$document_root$fastcgi_script_name</span><span class="p">;</span>
+<span class="w">        </span>fastcgi_param<span class="w"> </span>PATH_INFO<span class="w"> </span><span class="nv">$fastcgi_path_info</span><span class="p">;</span>
+<span class="w">        </span>fastcgi_param<span class="w"> </span>HTTPS<span class="w"> </span>on<span class="p">;</span>
+<span class="w">        </span><span class="c1"># Avoid sending the security headers twice</span>
+<span class="w">        </span>fastcgi_param<span class="w"> </span>modHeadersAvailable<span class="w"> </span>true<span class="p">;</span>
+<span class="w">        </span>fastcgi_param<span class="w"> </span>front_controller_active<span class="w"> </span>true<span class="p">;</span>
+<span class="w">        </span>fastcgi_pass<span class="w"> </span>unix:/opt/var/run/php8-fpm.sock<span class="p">;</span>
+<span class="w">        </span>fastcgi_intercept_errors<span class="w"> </span>on<span class="p">;</span>
+<span class="w">        </span>fastcgi_request_buffering<span class="w"> </span>off<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span>location<span class="w"> </span>~*<span class="w"> </span><span class="se">\.</span><span class="o">(</span>jpg<span class="p">|</span>jpeg<span class="p">|</span>gif<span class="p">|</span>css<span class="p">|</span>png<span class="p">|</span>js<span class="p">|</span>map<span class="p">|</span>woff<span class="p">|</span>woff2<span class="p">|</span>ttf<span class="p">|</span>svg<span class="p">|</span>eot<span class="o">)</span>$<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>expires<span class="w"> </span>30d<span class="p">;</span>
+<span class="w">        </span>access_log<span class="w"> </span>off<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h4 id="generate-tls-certificates-for-vhost">Generate TLS certificates for vhost</h4>
+<p>Install acme.sh:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/acmesh-official/acme.sh.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>acme.sh/
+$<span class="w"> </span>./acme.sh<span class="w"> </span>--install<span class="w"> </span>--nocron<span class="w"> </span>--home<span class="w"> </span>/opt/etc/acme.sh<span class="w"> </span>--accountemail<span class="w"> </span><span class="s2">&quot;user@example.com&quot;</span>
+</code></pre></div>
+<p>Configure your DNS provider API keys:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>nano<span class="w"> </span>/opt/etc/acme.sh/dnsapi/dns_cf.sh
+<span class="c1">#!/opt/bin/bash</span>
+
+<span class="c1">#</span>
+<span class="c1">#CF_Key=&quot;sdfsdfsdfljlbjkljlkjsdfoiwje&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#CF_Email=&quot;xxxx@sss.com&quot;</span>
+
+<span class="nv">CF_Token</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span>
+<span class="nv">CF_Account_ID</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span>
+<span class="nv">CF_Zone_ID</span><span class="o">=</span><span class="s2">&quot;foobar&quot;</span>
+
+<span class="nv">CF_Api</span><span class="o">=</span><span class="s2">&quot;https://api.cloudflare.com/client/v4&quot;</span>
+</code></pre></div>
+<p>Generate TLS certificate:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>/opt/etc/acme.sh/acme.sh<span class="w"> </span>--home<span class="w"> </span>/opt/etc/acme.sh<span class="w"> </span>--server<span class="w"> </span>letsencrypt<span class="w"> </span>--issue<span class="w"> </span>-d<span class="w"> </span>example.com<span class="w"> </span>--dns<span class="w"> </span>dns_cf
+</code></pre></div>
+<p>Setup a cronjob to automatically renew your certificate:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>crontab<span class="w"> </span>-e
+<span class="m">30</span><span class="w"> </span><span class="m">3</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="s2">&quot;/opt/etc/acme.sh/acme.sh&quot;</span><span class="w"> </span>--cron<span class="w"> </span>--home<span class="w"> </span><span class="s2">&quot;/opt/etc/acme.sh&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+</code></pre></div>
+<p>Setup a Diffie-Helmann key as follows:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>wget<span class="w"> </span>https://ssl-config.mozilla.org/ffdhe4096.txt<span class="w"> </span>-O<span class="w"> </span>/opt/etc/acme.sh/rutorrent.example.com_ecc/dhparam.pem
+</code></pre></div>
+<h3 id="restart-services">Restart services</h3>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>/opt/etc/init.d/S79php8-fpm<span class="w"> </span>restart
+$<span class="w"> </span>/opt/etc/init.d/S80nginx<span class="w"> </span>restart
+$<span class="w"> </span>/opt/etc/init.d/S85rtorrent<span class="w"> </span>start
+</code></pre></div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Nginx might error out with the following message:</p>
+<div class="highlight"><pre><span></span><code>nginx: [error] open() &quot;/opt/var/run/nginx.pid&quot; failed (2: No such file or directory)
+</code></pre></div>
+<p>To fix it, simply run the following command:</p>
+<div class="highlight"><pre><span></span><code>$ nginx -c /opt/etc/nginx/nginx.conf
+</code></pre></div>
+</div>
+<p>You should now be all set! <img alt="🎉" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/1f389.svg" title=":tada:" /></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">May 18, 2024</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+  
+
+
+
+
+                
+
+    
+        <!-- Giscus -->
+        <script src="https://giscus.app/client.js"
+            data-repo="barnumbirr/wiki"
+            data-repo-id="MDEwOlJlcG9zaXRvcnkzOTkyNjA2ODU="
+            data-category="Comments"
+            data-category-id="DIC_kwDOF8w8Dc4B_EIp"
+            data-mapping="pathname"
+            data-reactions-enabled="1"
+            data-emit-metadata="1"
+            data-input-position="top"
+            data-theme="light"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+
+        <!-- Reload on palette change -->
+        <script>
+        var giscus = document.querySelector("script[src*=giscus]")
+
+        // Set palette on initial load
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+            var theme = palette.color.scheme === "slate"
+                ? "dark"
+                : "light"
+
+        // Instruct Giscus to set theme
+        giscus.setAttribute("data-theme", theme)
+        }
+
+        // Register event handlers after documented loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            var ref = document.querySelector("[data-md-component=palette]")
+            ref.addEventListener("change", function() {
+                var palette = __md_get("__palette")
+                if (palette && typeof palette.color === "object") {
+                var theme = palette.color.scheme === "slate"
+                    ? "dark"
+                    : "light"
+
+                // Instruct Giscus to change theme
+                var frame = document.querySelector(".giscus-frame")
+                frame.contentWindow.postMessage(
+                    { giscus: { setConfig: { theme } } },
+                    "https://giscus.app"
+                )
+            }
+          })
+        })
+      </script>
+    
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2024 Martin Simon
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>
