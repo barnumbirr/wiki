@@ -10,7 +10,8 @@ The Remarkable 2 or why you won't ever need paper notebooks again.
 
 ### Linux kernel
 
-Running [`Software release 3.9`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
+Running [`Software release 3.14`](https://support.remarkable.com/s/article/Software-release-3-14).
+
 
 ```bash
 $ uname -a
@@ -19,7 +20,14 @@ Linux reMarkable 5.4.70-v1.3.4-rm11x #1 SMP PREEMPT Wed Mar 15 06:06:44 UTC 2023
 
 ??? "Older versions"
 
-    Running [`Software release 2.9/2.10/2.11`](https://support.remarkable.com/hc/en-us/sections/115001534689-Software-releases).
+    Running [`Software release 3.9`](https://support.remarkable.com/s/article/Software-release-3-9).
+
+    ```bash
+    $ uname -a
+    Linux reMarkable 5.4.70-v1.3.4-rm11x #1 SMP PREEMPT Wed Mar 15 06:06:44 UTC 2023 armv7l GNU/Linux
+    ```
+
+    Running [`Software release 2.9/2.10/2.11`](https://support.remarkable.com/s/article/Release-notes-overview).
 
     ```bash
     $ uname -a
@@ -123,12 +131,18 @@ settings menu.
 Navigate to it as follows: `Menu > Settings > General > Help > About >
 Copyrights and licenses > General information > GPLv3 Compliance`.
 
-The password is stored in `/etc/remarkable.conf`.
+The password is stored in `/home/root/.config/remarkable/xochitl.conf`.
 
 ```bash
 [General]
-DeveloperPassword=password
+DeveloperPassword=remarkable
 ```
+
+??? "Older versions"
+
+    Running [`Software release 2.x`](https://support.remarkable.com/s/article/Release-notes-overview).
+
+    The password is stored in `/etc/remarkable.conf`.
 
 ### Fix SSH lag
 
