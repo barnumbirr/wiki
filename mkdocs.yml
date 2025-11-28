@@ -3,7 +3,7 @@ site_url: https://wiki.simon.tf
 repo_name: 'barnumbirr/wiki'
 repo_url: 'https://github.com/barnumbirr/wiki'
 copyright: |
-  Copyright &copy; 2021-2024 Martin Simon
+  Copyright &copy; 2021-2025 Martin Simon
 
 plugins:
   - search
