@@ -49,5 +49,3 @@ theme:
 extra:
   analytics:
     provider: plausible
-    domain: wiki.simon.tf
-    script_url: https://plausible.io/js/plausible.outbound-links.js

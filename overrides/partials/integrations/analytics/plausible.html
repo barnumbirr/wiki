@@ -1,1 +1,5 @@
-<script defer data-domain="{{ config.extra.analytics.domain }}" src="{{ config.extra.analytics.script_url }}"></script>
+<script defer src="/zk/js/script.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init({ endpoint: "/zk/api/event" })
+</script>
