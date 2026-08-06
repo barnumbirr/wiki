@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the git-revision-date-localized plugin works.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # mkdocs-material (pulls mkdocs + pymdown-extensions) + the repo's
+      # own requirements (git-revision plugin). Mirrors the deploy action's
+      # bundled build env closely enough to catch a build-breaking bump.
+      - run: pip install mkdocs-material -r requirements.txt
+
+      - run: mkdocs build
